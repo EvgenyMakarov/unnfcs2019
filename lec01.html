@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>lec01</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Лекция 1</h1>
+
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+Суждениями (вещами, которые доказываются с помощью построения вывода)
+являются секвенции, имеющие вид <span class="inlinecode"><span class="id" title="var">Gamma</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, где <span class="inlinecode"><span class="id" title="var">Gamma</span></span> — конечная
+последовательность формул, <span class="inlinecode"><span class="id" title="var">A</span></span> — формула. Смысл <span class="inlinecode"><span class="id" title="var">Gamma</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">A</span></span>: конъюнкция
+формул в Gamma влечет A. В Coq каждая формула из Gamma имеет свою
+метку-идентификатор. Секвенция <span class="inlinecode"><span class="id" title="var">H1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A1</span>,</span> <span class="inlinecode"><span class="id" title="var">H2</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A2</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">B</span></span> записывается в виде
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="var">H1</span> : <span class="id" title="var">A1</span><br/>
+<span class="id" title="var">H2</span> : <span class="id" title="var">A2</span><br/>
+============================<br/>
+<span class="id" title="var">B</span>
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Система правил вывода похожа на исчисление, называемое "Натуральный
+(естественный) вывод". Аксиомами называются секвенции <span class="inlinecode"><span class="id" title="var">Gamma</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, где
+<span class="inlinecode"><span class="id" title="var">A</span></span> входит в <span class="inlinecode"><span class="id" title="var">Gamma</span></span>. Для каждой логической связки в натуральном выводе
+есть правила введения и правила устранения. Первое правило показывают,
+как доказать утверждение с этой связкой, а второе — как использовать такое
+утверждение.
+
+<div class="paragraph"> </div>
+
+В натуральном выводе меняются формулы справа от штопора. В Coq
+используются также правила, работающие с правилами слева от штопора.
+В терминологии автоматизированных систем доказательства правила вывода
+называются тактиками.
+
+<div class="paragraph"> </div>
+
+Ниже приведены правила вывода, их названия, обозначения в натуральном
+выводе, а также соответствующие тактики Coq.
+
+<div class="paragraph"> </div>
+
+<a name="lab1"></a><h3 class="section">Введение импликации (В-&gt;). Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span>
+</h3>
+
+<pre>
+ Gamma, A |- B
+---------------
+Gamma |- A -&gt; B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab2"></a><h3 class="section">Удаление импликации (У-&gt;), Модус Поненс
+</h3>
+
+<pre>
+Gamma |- A -&gt; B     Gamma |- A
+------------------------------ 
+         Gamma |- B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab3"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">apply</span></span>
+</h3>
+
+В Coq чаще используется следующий аналог (У-&gt;)
+<pre>
+        Gamma |- A
+--------------------------- 
+   Gamma, A -&gt; B |- B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab4"></a><h3 class="section">Введение конъюнкции (В/\). Тактика <span class="inlinecode"><span class="id" title="tactic">split</span></span>
+</h3>
+
+<pre>
+Gamma |- A     Gamma |- B
+-------------------------
+     Gamma |- A /\ B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab5"></a><h3 class="section">Устранение конъюнкции (У/\)
+</h3>
+
+<pre>
+Gamma |- A /\ B         Gamma |- A /\ B      
+---------------         ---------------
+  Gamma |- A              Gamma |- B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab6"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>
+</h3>
+
+В Coq используется следующий аналог (У/\)
+<pre>
+Gamma, A, B |- C
+------------------
+Gamma, A /\ B |- C
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab7"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">left</span></span>
+</h3>
+
+<pre>
+  Gamma |- A
+---------------
+Gamma |- A \/ B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab8"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">right</span></span>
+</h3>
+
+<pre>
+  Gamma |- B
+---------------
+Gamma |- A \/ B
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab9"></a><h3 class="section">Устранение дизъюнкции (У\/)
+</h3>
+
+<pre>
+Gamma |- A \/ B   Gamma, A |- C   Gamma, B |- C
+------------------------------------------------
+                Gamma |- C
+</pre>
+
+<div class="paragraph"> </div>
+
+<a name="lab10"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>
+</h3>
+
+В Coq используется следующий аналог (У\/)
+<pre>
+Gamma, A |- C    Gamma, B |- C
+------------------------------
+       Gamma, A \/ B |- C
+</pre>
+
+<div class="paragraph"> </div>
+
+<span class="inlinecode">¬<span class="id" title="var">A</span></span> (отрицание <span class="inlinecode"><span class="id" title="var">A</span></span>) является сокращением для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, что в свою очередь
+по определению является <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span>, где <span class="inlinecode"><span class="id" title="var">False</span></span> — тождественно ложная
+формула. Это можно увидеть с помощью тактики <span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">not</span></span>. Благодаря этому
+определению правила для отрицания являются производными от правил для
+импликации.
+
+<div class="paragraph"> </div>
+
+<a name="lab11"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span>
+</h3>
+
+<pre>
+Gamma, A |- False
+------------------
+   Gamma |- ~A
+</pre>
+
+<div class="paragraph"> </div>
+
+Важно: выводы строятся снизу вверх, начиная с теоремы и заканчивая аксиомами.
+
+<div class="paragraph"> </div>
+
+Определения, утверждения и доказательства записываются в одном файле.
+В CoqIDE файл делится на две области. Первая проверена и принята Coq.
+Она имеет зеленый фон. При нажатии на кнопку со стрелкой вниз на панели
+инструментов или на клавиши Ctrl+стрелка вниз Coq делает попытку
+проверить правильность следуюей команды или тактики. Другие команды
+для изменения области находятся в меню Navigation.
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">Test</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Переменные <span class="inlinecode"><span class="id" title="var">A</span></span>, <span class="inlinecode"><span class="id" title="var">B</span></span>, <span class="inlinecode"><span class="id" title="var">C</span></span> объявлены как пропозициональные 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Variables</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> : <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t1</span> : <span class="id" title="var">A</span> → <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Текущая цель, то есть секвенция, находится в правой верхней
+части окна 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Возможно также:
+<ul class="doclist">
+<li> <span class="inlinecode"><span class="id" title="tactic">intro</span>.</span>
+
+</li>
+<li> <span class="inlinecode"><span class="id" title="tactic">intros</span>.</span>
+
+</li>
+<li> <span class="inlinecode"><span class="id" title="tactic">intros</span></span> <span class="inlinecode"><span class="id" title="var">H</span>.</span>
+
+</li>
+</ul>
+<span class="inlinecode"><span class="id" title="tactic">intros</span></span> принимает любое количество посылок, <span class="inlinecode"><span class="id" title="tactic">intro</span></span> не более одной. 
+<div class="paragraph"> </div>
+
+ В текущей цели формула <span class="inlinecode"><span class="id" title="var">A</span></span> находится слева и справа от штопора,
+поэтому это аксиома. Закончить доказательство можно следующим образом. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="tactic">assumption</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Возможны также:
+<ul class="doclist">
+<li> <span class="inlinecode"><span class="id" title="tactic">trivial</span>.</span>
+
+</li>
+<li> <span class="inlinecode"><span class="id" title="tactic">auto</span>.</span>
+
+</li>
+</ul>
+В конце доказательства ставится команда <span class="inlinecode"><span class="id" title="keyword">Qed</span>.</span>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t2</span> : (<span class="id" title="var">A</span> → <span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span> <span class="id" title="var">H3</span>.<br/>
+<span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>.<br/>
+<span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="tactic">apply</span> <span class="id" title="var">H2</span>.<br/>
+<span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t3</span> : <span class="id" title="var">A</span> ∧ <span class="id" title="var">B</span> → <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">K</span> <span class="id" title="var">L</span>].<br/>
+<span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t4</span> : (<span class="id" title="var">A</span> ∨ <span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">C</span>) ∧ (<span class="id" title="var">B</span> → <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="tactic">split</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Далее следует доказательства двух подцелей. Начало доказательтва
+каждой подцели рекомендуется обозначить символом <span class="inlinecode">+</span>. В этом случае Coq выдаст
+ошибку, если к следующему + предыдущая подцель не была полностью доказана.
+Можно строить вложенную структуру, используя символы <span class="inlinecode">*</span>, <span class="inlinecode">+</span>, <span class="inlinecode">-</span>, например:
+<br/>
+<span class="inlinecode">* <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">left</span>. <span class="id" title="tactic">trivial</span>.<br/>
+* <span class="id" title="tactic">assumption</span>.
+<div class="paragraph"> </div>
+
+</span>
+</div>
+<div class="code">
+
+<br/>
++ <span class="id" title="tactic">intro</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">left</span>. <span class="id" title="tactic">trivial</span>.<br/>
++ <span class="id" title="tactic">intro</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">right</span>. <span class="id" title="tactic">trivial</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t5</span> : (~<span class="id" title="var">A</span> ∨ ¬<span class="id" title="var">B</span>) → ~(<span class="id" title="var">A</span> ∧ <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode">¬<span class="id" title="var">A</span></span> — это обозначение для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, a <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> определяется как
+<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span> 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="tactic">unfold</span> <span class="id" title="var">not</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H2</span> <span class="id" title="var">H3</span>].<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">H1</span>.<br/>
++ <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">trivial</span>.<br/>
++ <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">trivial</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">Test</span>.<br/>
+</div>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
