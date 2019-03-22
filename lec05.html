@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Лекция 5</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Лекция 5</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">Arithmetic</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab1"></a><h1 class="section">Лейбницевское равенство
+</h1>
+
+
+<div class="paragraph"> </div>
+
+Теория называется теорией с равенством, если она содержит
+(универсальные замыкания) следующих аксиом
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> (E1) x = x
+
+</li>
+<li> (E2) x = y -&gt; y = x
+
+</li>
+<li> (E3) x = y -&gt; y = z -&gt; x = z
+
+</li>
+<li> (E4) x = y -&gt; f x = f y и аналогично для многоместных функциональных симовлов
+
+</li>
+<li> (E5) x = y -&gt; P x -&gt; P y и аналогично для многоместных предикатных символов
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Напоминание: A<span class="inlinecode"><span class="id" title="var">t</span>/<span class="id" title="var">x</span></span> обозначает результат подстановки терма t
+вместо свободных вхождений переменной x в формулу A.
+
+<div class="paragraph"> </div>
+
+Утверждение.
+Пусть A есть произвольная формула, x ∈ FV(A), s, t -- термы.
+Тогда |- s = t -&gt; A<span class="inlinecode"><span class="id" title="var">s</span>/<span class="id" title="var">x</span></span> -&gt; A<span class="inlinecode"><span class="id" title="var">t</span>/<span class="id" title="var">x</span></span>
+Доказывается индукцией по формуле A.
+
+<div class="paragraph"> </div>
+
+Можно взять это утверждение и рефлексивность как аксиомы равенства.
+Симметричность и транзитивность выводятся (упражнение).
+Такое равенство называется лейбницевским: равными считаются объекты,
+взаимозаменяемые в любом контексте.
+
+<div class="paragraph"> </div>
+
+
+<div class="paragraph"> </div>
+
+Правила вывода и названия тактик:
+
+<div class="paragraph"> </div>
+
+<pre>
+-------- reflexivity
+ t = t
+
+
+A[s/x]   s = t
+-------------- rewrite
+    A[t/x]
+</pre>
+
+<div class="paragraph"> </div>
+
+Если есть посылка H : s = t, то <span class="inlinecode"><span class="id" title="tactic">rewrite</span></span> <span class="inlinecode">&lt;-</span> <span class="inlinecode"><span class="id" title="var">H</span></span> превращает цель A<span class="inlinecode"><span class="id" title="var">t</span>/<span class="id" title="var">x</span></span> в A<span class="inlinecode"><span class="id" title="var">s</span>/<span class="id" title="var">x</span></span>,
+а <span class="inlinecode"><span class="id" title="tactic">rewrite</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> превращает цель A<span class="inlinecode"><span class="id" title="var">s</span>/<span class="id" title="var">x</span></span> в A<span class="inlinecode"><span class="id" title="var">t</span>/<span class="id" title="var">x</span></span>.
+Допустимо также <span class="inlinecode"><span class="id" title="tactic">rewrite</span></span> <span class="inlinecode"><span class="id" title="var">H1</span>,</span> <span class="inlinecode"><span class="id" title="var">H2</span>,</span> <span class="inlinecode"><span class="id" title="var">H3</span></span> для последовательных переписываний.
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">eq_refl</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">x</span> = <span class="id" title="var">x</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">x</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="tactic">intro</span></span> не обязательно, так как <span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span> делает
+intro, пока не доберется до равенства 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">eq_symm</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">x</span> = <span class="id" title="var">y</span> → <span class="id" title="var">y</span> = <span class="id" title="var">x</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">H</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">eq_trans</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">x</span> = <span class="id" title="var">y</span> → <span class="id" title="var">y</span> = <span class="id" title="var">z</span> → <span class="id" title="var">x</span> = <span class="id" title="var">z</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">now</span></span> <span class="inlinecode"><span class="id" title="var">tactic</span></span> эквивалентно <span class="inlinecode"><span class="id" title="var">tactic</span>;</span> <span class="inlinecode"><span class="id" title="var">easy</span></span> где <span class="inlinecode"><span class="id" title="var">easy</span></span> -- тактика,
+доказывающая простые цели. Другие автоматические тактики: <span class="inlinecode"><span class="id" title="tactic">trivial</span></span>, <span class="inlinecode"><span class="id" title="tactic">auto</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H1</span>, <span class="id" title="var">H2</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab2"></a><h1 class="section">Арифметика Пеано (тип <span class="inlinecode"><span class="id" title="var">nat</span></span>)
+</h1>
+
+
+<div class="paragraph"> </div>
+
+Сигнатура арифметики Пеано
+<ul class="doclist">
+<li> Константа O (заглавная буква)
+
+</li>
+<li> Функциональный символ S
+
+</li>
+<li> Функциональные символы +, *
+
+</li>
+<li> Предикатный символ =
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Coq использует десятичную запись для чисел.
+<ul class="doclist">
+<li> 0 по определению есть O
+
+</li>
+<li> 1 по определению есть S O
+
+</li>
+<li> 2 по определению есть S (S O)
+
+</li>
+<li> и т.д.
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Натуральные числа можно рассматривать как
+исчисление:
+<pre>
+O : nat -- аксиома
+
+n : nat
+----------    правило вывода
+S n : nat
+</pre>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Print</span> <span class="id" title="var">nat</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Печатать можно только идентификаторы 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Check</span> <span class="id" title="var">S</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">O</span>)).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Проверять на тИповую правильность можно любые выражения 
+<div class="paragraph"> </div>
+
+
+<div class="paragraph"> </div>
+
+Аксиомы арифметики Пеано
+
+<div class="paragraph"> </div>
+
+См: Пентус М.Р. Введение в математическую логику. §3.28 и ссылки там
+<a href="http://lpcs.math.msu.su/~pentus/ftp/mehmat/vmlk06le.pdf">http://lpcs.math.msu.su/~pentus/ftp/mehmat/vmlk06le.pdf</a>
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> (PA1) S n &lt;&gt; 0
+
+</li>
+<li> (PA2) S m = S n -&gt; m = n
+
+</li>
+<li> (PA3) 0 + n = n
+
+</li>
+<li> (PA4) (S m) + n = S (m + n)
+
+</li>
+<li> (PA5) 0 * n = 0
+
+</li>
+<li> (PA6) (S m) * n = n + m * n
+
+</li>
+<li> (PA7) P 0 -&gt; (forall n, P n -&gt; P (S n)) -&gt; forall n, P n
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">plus</span> (<span class="id" title="var">m</span> <span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">m</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ <span class="id" title="var">n</span><br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">m'</span> ⇒ <span class="id" title="var">S</span> (<span class="id" title="var">plus</span> <span class="id" title="var">m'</span> <span class="id" title="var">n</span>)<br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Infix</span> &quot;+" := <span class="id" title="var">plus</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 50, <span class="id" title="tactic">left</span> <span class="id" title="keyword">associativity</span>) : <span class="id" title="var">nat_scope</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">times</span> (<span class="id" title="var">m</span> <span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">m</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ 0<br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">m'</span> ⇒ <span class="id" title="var">n</span> + <span class="id" title="var">times</span> <span class="id" title="var">m'</span> <span class="id" title="var">n</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Infix</span> &quot;*" := <span class="id" title="var">times</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 40, <span class="id" title="tactic">left</span> <span class="id" title="keyword">associativity</span>) : <span class="id" title="var">nat_scope</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Можно использовать Coq как калькулятор 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Compute</span> 10 + 20.<br/>
+<span class="id" title="keyword">Compute</span> 2 * 3 * 4 * 5.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab3"></a><h1 class="section">Равенство по определению
+</h1>
+
+
+<div class="paragraph"> </div>
+
+Coq имеет два вида равенства: равенство по определению и
+доказуемое (лейбницевское) равенство. Термы, равные по определению,
+считаются одним и тем же термом.
+
+<div class="paragraph"> </div>
+
+Определение функции <span class="inlinecode"><span class="id" title="var">plus</span></span> выше добавляет следующие равенства
+по определению:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> (P1) 0 + n = n
+
+</li>
+<li> (P2) S m + n = S (m + n)
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Определение функции <span class="inlinecode"><span class="id" title="var">times</span></span> добавляет
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> (T1) 0 * n = 0
+
+</li>
+<li> (T2) (S m) * n = n + m * n
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Это позволяет заменить некоторые доказательства вычислениями.
+Так, если использовать только лейбницевское равенство, то для
+утверждения S (S 0) + S (S 0) = S (S (S (S 0))) можно привести
+следующее довольно длинное доказательство.
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 1.  S (S 0) + S (S 0) = S (S 0 + S (S 0)) (P2)
+
+</li>
+<li> 2.  S 0 + S (S 0) = S (0 + S (S 0)) (P2)
+
+</li>
+<li> 3.  0 + S (S 0) = S (S 0) (P1)
+
+</li>
+<li> 4.  0 + S (S 0) = S (S 0) -&gt; S (0 + S (S 0)) = S (S (S 0)) (E4)
+
+</li>
+<li> 5.  S (0 + S (S 0)) = S (S (S 0)) 3, 4, Modus Ponens (MP)
+
+</li>
+<li> 6.  S 0 + S (S 0) = S (0 + S (S 0)) -&gt;
+
+</li>
+<li>       S (0 + S (S 0)) = S (S (S 0)) -&gt; S 0 + S (S 0) = S (S (S 0)) (E3)
+
+</li>
+<li> 7.  S 0 + S (S 0) = S (S (S 0)) 2, 5, 6, MP
+
+</li>
+<li> 8.  S 0 + S (S 0) = S (S (S 0)) -&gt; S (S 0 + S (S 0)) = S (S (S (S 0))) (E4)
+
+</li>
+<li> 9.  S (S 0 + S (S 0)) = S (S (S (S 0))) 7, 8, MP
+
+</li>
+<li> 10. S (S 0) + S (S 0) = S (S 0 + S (S 0)) -&gt;
+      S (S 0 + S (S 0)) = S (S (S (S 0))) -&gt;
+      S (S 0) + S (S 0) = S (S (S (S 0))) (E3)
+
+</li>
+<li> 11. S (S 0) + S (S 0) = S (S (S (S 0))) 1, 9, 10, MP
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+Если же считать обе части равенств (P1) и (P2) одним и тем же термом,
+то S (S 0) + S (S 0) и S (S (S (S 0))) также будут одинаковыми термами,
+и их равенство доказывается одной аксиомой (E1) (рефлексивность).
+
+<div class="paragraph"> </div>
+
+Различие между этими подходами описывается так называемым принципом Пуанкаре:
+"Вычисление и доказательство — не одно и то же. Вычисление не требует
+доказательства". Coq использует принцип Пуанкаре, и это позволяет значительно
+сократить размер доказательств, а также делает возможным написание тактик,
+где основная работа заключается в вычислении функций, написанных на самом
+языке Coq.
+
+<div class="paragraph"> </div>
+
+Как бинарное отношение равенство по определению содержится в лейбницевском
+(общем) равенстве. Отличие заключается в том, что равенство по определению
+разрешимо, в то время как общее равенство нет. Поэтому Coq может автоматически
+проверить истинность S (S 0)) + n = S (S n), поскольку это равенство следует
+из (P1) и (P2). Однако равенство n + S (S 0) = S (S n) нужно доказывать, так
+как с точки зрения Coq части этого равенства — разные термы.
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">plus_0_l</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">plus</span> 0 <span class="id" title="var">n</span> = <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Равенство по определению 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">plus_S_l</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">plus</span> (<span class="id" title="var">S</span> <span class="id" title="var">m</span>) <span class="id" title="var">n</span> = <span class="id" title="var">S</span> (<span class="id" title="var">plus</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">plus_0_r</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">plus</span> <span class="id" title="var">n</span> 0 = <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span> не работает: это не есть равенство по определению 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Так мы даем имена переменной и индукционной гипотезе в шаге индукции.
+Можно просто <span class="inlinecode"><span class="id" title="tactic">induction</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>; тогда Coq выберет свои имена. 
+</div>
+<div class="code">
+
+<br/>
+*  <span class="id" title="tactic">reflexivity</span>.<br/>
+* <br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. &nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">IH</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">plus_S_r</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> + <span class="id" title="var">S</span> <span class="id" title="var">n</span> = <span class="id" title="var">S</span> (<span class="id" title="var">m</span> + <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">m</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">m</span> <span class="id" title="var">IH</span>].<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">IH</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">plus_comm</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> + <span class="id" title="var">n</span> = <span class="id" title="var">n</span> + <span class="id" title="var">m</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">m</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">m</span> <span class="id" title="var">IH</span>].<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>.  <span class="id" title="tactic">rewrite</span> <span class="id" title="var">plus_0_r</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">plus_S_r</span>, <span class="id" title="var">IH</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+При переписывании с помощью тактики <span class="inlinecode"><span class="id" title="tactic">rewrite</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> может оказаться, что
+в цели есть несколько подтермов, имеющих форму левой (или правой)
+части равенства H. Здесь H может быть гипотезой в контексте (сверху от
+горизонтальной черты) или теорема, доказанная ранее. Например, пусть цель есть
+  S (n + m + m * n) = S (m + n + m * n)
+(напоминание: + есть левоассоциативная операция), и мы хотим заменить
+n + m на m + n с помощью доказанной выше теоремы plus_comm.
+В цели есть несколько подтермов, имеющих вид x + y:
+<ul class="doclist">
+<li> n + m
+
+</li>
+<li> (n + m) + m * n
+
+</li>
+<li> m + n
+
+</li>
+<li> (m + n) + m * n
+
+</li>
+</ul>
+Указать, какой из этих подтермов нужно переписывать, можно, например, так:
+<ul class="doclist">
+<li> rewrite (plus_comm n m) переписывает n + m в m + n
+
+</li>
+<li> rewrite (plus_comm (n + m) (m * n)) переписывает (n + m) + m * n в
+
+</li>
+</ul>
+m * n * (n + m).
+
+<div class="paragraph"> </div>
+
+<a name="lab4"></a><h1 class="section">Задание</h1>
+ Докажите следующие теоремы. Замените Admitted на доказательство. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">plus_assoc</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">k</span>, (<span class="id" title="var">m</span> + <span class="id" title="var">n</span>) + <span class="id" title="var">k</span> = <span class="id" title="var">m</span> + (<span class="id" title="var">n</span> + <span class="id" title="var">k</span>).<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">times_0_r</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">n</span> * 0 = 0.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">times_S_r</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> * <span class="id" title="var">S</span> <span class="id" title="var">n</span> = <span class="id" title="var">m</span> + <span class="id" title="var">m</span> * <span class="id" title="var">n</span>.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">times_comm</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> * <span class="id" title="var">n</span> = <span class="id" title="var">n</span> * <span class="id" title="var">m</span>.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">times_plus_distr</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">k</span>, <span class="id" title="var">m</span> * (<span class="id" title="var">n</span> + <span class="id" title="var">k</span>) = <span class="id" title="var">m</span> * <span class="id" title="var">n</span> + <span class="id" title="var">m</span> * <span class="id" title="var">k</span>.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">Arithmetic</span>.<br/>
+</div>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
