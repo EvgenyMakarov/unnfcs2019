@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>lec02</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<div class="code">
+
+<br/>
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab1"></a><h1 class="section">Лекция 2. Тактики для кванторов</h1>
+
+<div class="paragraph"> </div>
+
+
+<div class="paragraph"> </div>
+
+Coq — это строго типизированный язык. Каждое выражение имеет
+определенный тип, и все типы должны быть согласованы между собой,
+прежде чем выражение будет принято. Этим Coq отличается от Racket, где
+типы проверяются только во время исполнения программы. Racket
+допускает такие определения, как <span class="inlinecode">(<span class="id" title="var">define</span></span> <span class="inlinecode">(<span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> <span class="inlinecode">(+</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">#<span class="id" title="var">f</span>))</span>.
+
+<div class="paragraph"> </div>
+
+В предыдущем семестре изучалась односортная логика, где все предметные
+переменные пробегали по всему носителю интерпретации. Логика Coq
+многосортная, и термы, в том числе переменные, могут иметь разные типы
+и принимать значения в разных множествах. Поэтому после квантора и
+переменной указывается тип, по которому пробегает эта переменная. От
+последующей формулы переменная отделяется запятой (в прошлом семестре
+для этого использовалась точка). Пример: <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">T</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span>. Как
+и в Racket, предикатные и функциональные символы отделяются от
+аргументов пробелами, но аппликация не обязательно требует скобок.
+Часто Coq может определить тип <span class="inlinecode"><span class="id" title="var">T</span></span> из контеста, поэтому допускается
+писать <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span>.
+
+<div class="paragraph"> </div>
+
+<a name="lab2"></a><h3 class="section">Введение квантора всеобщности (В∀), оно же (|-∀). Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span></h3>
+
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Gamma</span> |- <span class="id" title="var">A</span>[<span class="id" title="var">y</span>/<span class="id" title="var">x</span>]<br/>
+------------------------<br/>
+<span class="id" title="var">Gamma</span> |- <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">A</span>
+<div class="paragraph"> </div>
+
+</span>Аргументом <span class="inlinecode"><span class="id" title="tactic">intro</span></span> является переменная <span class="inlinecode"><span class="id" title="var">y</span></span>. Ограничение: <span class="inlinecode"><span class="id" title="var">y</span></span> не входит
+свободно в <span class="inlinecode"><span class="id" title="var">Gamma</span></span>. Несколько последовательных тактик <span class="inlinecode"><span class="id" title="tactic">intro</span></span> можно
+объединить в <span class="inlinecode"><span class="id" title="tactic">intros</span></span>, например, <span class="inlinecode"><span class="id" title="tactic">intros</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode"><span class="id" title="var">z</span></span>.
+
+<div class="paragraph"> </div>
+
+<a name="lab3"></a><h3 class="section">Квантор всеобщности слева (∀|-). Тактика <span class="inlinecode"><span class="id" title="tactic">specialize</span></span></h3>
+
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;<span class="id" title="var">Gamma</span>, <span class="id" title="var">A</span>[<span class="id" title="var">t</span>/<span class="id" title="var">x</span>] |- <span class="id" title="var">B</span><br/>
+---------------------------<br/>
+<span class="id" title="var">Gamma</span>, <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">A</span> |- <span class="id" title="var">B</span>
+<div class="paragraph"> </div>
+
+</span>Если слева от штопора формула <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">T</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span> имеет метку <span class="inlinecode"><span class="id" title="var">H</span></span>, то
+тактика <span class="inlinecode"><span class="id" title="tactic">specialize</span></span> <span class="inlinecode">(<span class="id" title="var">H</span></span> <span class="inlinecode"><span class="id" title="var">t</span>)</span> превращает <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">T</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span> в <span class="inlinecode"><span class="id" title="var">A</span>[<span class="id" title="var">t</span>/<span class="id" title="var">x</span>]</span>.
+Очевидно, терм <span class="inlinecode"><span class="id" title="var">t</span></span> должен иметь тип <span class="inlinecode"><span class="id" title="var">T</span></span>.
+
+<div class="paragraph"> </div>
+
+<a name="lab4"></a><h3 class="section">Квантор существования слева (∃|-). Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span></h3>
+
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Gamma</span>, <span class="id" title="var">A</span>[<span class="id" title="var">y</span>/<span class="id" title="var">x</span>] |- <span class="id" title="var">B</span><br/>
+----------------------------<br/>
+&nbsp;<span class="id" title="var">Gamma</span>, <span class="id" title="tactic">exists</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">A</span> |- <span class="id" title="var">B</span>
+<div class="paragraph"> </div>
+
+</span>Доказательство экзистенциальной формулы <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span> можно рассматривать как пару,
+состоящую из свидетеля, то есть некоторого терма <span class="inlinecode"><span class="id" title="var">t</span></span>, и доказательства <span class="inlinecode"><span class="id" title="var">A</span>[<span class="id" title="var">t</span>/<span class="id" title="var">x</span>]</span>.
+Тактику <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> в данном случае можно рассматривать как разбиение доказательства
+посылки <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span> на неизвестного свидетеля, которому дается новое имя <span class="inlinecode"><span class="id" title="var">y</span></span>, и
+доказательство <span class="inlinecode"><span class="id" title="var">A</span>[<span class="id" title="var">y</span>/<span class="id" title="var">x</span>]</span>. В этом варианте Coq сам выбирает имя <span class="inlinecode"><span class="id" title="var">y</span></span> и имя новой посылки
+<span class="inlinecode"><span class="id" title="var">A</span>[<span class="id" title="var">y</span>/<span class="id" title="var">x</span>]</span>. Их можно задать явно следующим образом: <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[<span class="id" title="var">y</span></span> <span class="inlinecode"><span class="id" title="var">H1</span>]</span>. Имя <span class="inlinecode"><span class="id" title="var">H1</span></span> может
+совпадать с <span class="inlinecode"><span class="id" title="var">H</span></span>, поскольку старая посылка с именем <span class="inlinecode"><span class="id" title="var">H</span></span> исчезает.
+Ограничение: <span class="inlinecode"><span class="id" title="var">y</span></span> не входит свободно в <span class="inlinecode"><span class="id" title="var">Gamma</span></span>.
+
+<div class="paragraph"> </div>
+
+<a name="lab5"></a><h3 class="section">Введение квантора существования (В∃), оно же (|-∃). Тактика <span class="inlinecode"><span class="id" title="tactic">exists</span></span></h3>
+
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Gamma</span> |- <span class="id" title="var">A</span>[<span class="id" title="var">t</span>/<span class="id" title="var">x</span>]<br/>
+------------------------<br/>
+<span class="id" title="var">Gamma</span> |- <span class="id" title="tactic">exists</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">A</span>
+<div class="paragraph"> </div>
+
+</span>Тактика <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">t</span></span> превращает формулу <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:<span class="id" title="var">T</span>,</span> <span class="inlinecode"><span class="id" title="var">A</span></span> справа от штопора
+в <span class="inlinecode"><span class="id" title="var">A</span>[<span class="id" title="var">t</span>/<span class="id" title="var">x</span>]</span>. Очевидно, терм <span class="inlinecode"><span class="id" title="var">t</span></span> должен иметь тип <span class="inlinecode"><span class="id" title="var">T</span></span>.
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">PredicateLogic</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">T</span> : <span class="id" title="keyword">Type</span>.<br/>
+</div>
+
+<div class="doc">
+Тип <span class="inlinecode"><span class="id" title="var">T</span></span> будет играть роль носителя интерпретации 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Variables</span> <span class="id" title="var">P</span> <span class="id" title="var">P'</span> : <span class="id" title="var">T</span> → <span class="id" title="keyword">Prop</span>.<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">P</span></span> и <span class="inlinecode"><span class="id" title="var">P'</span></span> — одноместные предикатные символы, принимающие аргументы типа <span class="inlinecode"><span class="id" title="var">T</span></span> 
+</div>
+<div class="code">
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">Q</span> : <span class="id" title="var">T</span> → <span class="id" title="var">T</span> → <span class="id" title="keyword">Prop</span>.<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">Q</span></span> — двуместный предикатный символ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t1</span> : (<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P</span> <span class="id" title="var">x</span> ∧ <span class="id" title="var">P'</span> <span class="id" title="var">x</span>) ↔<br/>
+&nbsp;&nbsp;(<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P</span> <span class="id" title="var">x</span>) ∧ (<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P'</span> <span class="id" title="var">x</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">split</span>.<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">intro</span> <span class="id" title="var">y</span>. <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H</span> <span class="id" title="var">y</span>). <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> <span class="id" title="var">H2</span>]. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">intro</span> <span class="id" title="var">y</span>. <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H</span> <span class="id" title="var">y</span>). <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> <span class="id" title="var">H2</span>]. <span class="id" title="tactic">assumption</span>.<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intro</span> <span class="id" title="var">y</span>. <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">trivial</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">trivial</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t2</span> : (<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P</span> <span class="id" title="var">x</span> ∨ <span class="id" title="var">P'</span> <span class="id" title="var">x</span>) ↔<br/>
+&nbsp;&nbsp;(<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P</span> <span class="id" title="var">x</span>) ∨ (<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P'</span> <span class="id" title="var">x</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+</div>
+
+<div class="doc">
+Тактика <span class="inlinecode"><span class="id" title="tactic">split</span></span> порождает две цели. Мы хотели бы применить <span class="inlinecode"><span class="id" title="tactic">intro</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> к обеим.
+Для этого используется операция ;. Она называется "тактикал", так как соединяет
+две тактики. Тактика <span class="inlinecode"><span class="id" title="var">t1</span>;</span> <span class="inlinecode"><span class="id" title="var">t2</span></span> запускает <span class="inlinecode"><span class="id" title="var">t1</span></span> и затем применяет <span class="inlinecode"><span class="id" title="var">t2</span></span> к каждой цели,
+полученной в результате работы <span class="inlinecode"><span class="id" title="var">t1</span></span>.
+
+</div>
+<div class="code">
+<span class="id" title="tactic">split</span>; <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+* <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">a</span> <span class="id" title="var">H</span>].<br/>
+</div>
+
+<div class="doc">
+Без использования ; нужно писать следующим образом 
+<div class="paragraph"> </div>
+
+  <br/>
+<span class="inlinecode">&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H2</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">left</span>. <span class="id" title="tactic">exists</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">right</span>. <span class="id" title="tactic">exists</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;
+<div class="paragraph"> </div>
+
+</span>   Это же можно написать в одну строчку следующим образом. Здесь
+  <span class="inlinecode"><span class="id" title="var">t1</span>;</span> <span class="inlinecode">[<span class="id" title="var">t2</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">t3</span>]</span> запускает <span class="inlinecode"><span class="id" title="var">t1</span></span>, которая должна породить две цели, после чего
+  применяет <span class="inlinecode"><span class="id" title="var">t2</span></span> к первой цели и <span class="inlinecode"><span class="id" title="var">t3</span></span> ко второй. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H2</span>]; [<span class="id" title="tactic">left</span> | <span class="id" title="tactic">right</span>]; <span class="id" title="tactic">exists</span> <span class="id" title="var">a</span>; <span class="id" title="tactic">assumption</span>.<br/>
+* <br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>]; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">x</span> <span class="id" title="var">H</span>]; <span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>; [<span class="id" title="tactic">left</span> | <span class="id" title="tactic">right</span>]; <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Не обязательно сразу пытаться записать доказательство самым коротким образом.
+Обычно ; используется для сокращения уже написанного доказательства. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">PredicateLogic</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab6"></a><h1 class="section">Домашнее задание 2</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">Homework02</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">T</span> : <span class="id" title="keyword">Type</span>.<br/>
+<span class="id" title="keyword">Variables</span> <span class="id" title="var">P1</span> <span class="id" title="var">P2</span> : <span class="id" title="var">T</span> → <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Докажите следующие формулы. Замените Admitted на доказательство. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t3</span> : (<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span>) ∨ (<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P2</span> <span class="id" title="var">x</span>) →<br/>
+&nbsp;&nbsp;(<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> : <span class="id" title="var">T</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span> ∨ <span class="id" title="var">P2</span> <span class="id" title="var">x</span>).<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t4</span> : (<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span> ∧ <span class="id" title="var">P2</span> <span class="id" title="var">x</span>) → (<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span>) ∧ (<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P2</span> <span class="id" title="var">x</span>).<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Variables</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> : <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t5</span> : ((<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span>) → <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span>, <span class="id" title="var">P2</span> <span class="id" title="var">x</span>) →<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span> → <span class="id" title="var">P2</span> <span class="id" title="var">x</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">H</span> <span class="id" title="var">y</span> <span class="id" title="var">H1</span>.<br/>
+<span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">exists</span> <span class="id" title="var">y</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t6</span> : (~<span class="id" title="tactic">exists</span> <span class="id" title="var">x</span>, <span class="id" title="var">P1</span> <span class="id" title="var">x</span>) → <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span>, ¬<span class="id" title="var">P1</span> <span class="id" title="var">x</span>.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">Homework02</span>.<br/>
+</div>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
