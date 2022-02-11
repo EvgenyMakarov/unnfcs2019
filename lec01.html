@@ -24,7 +24,7 @@
 </div>
 
 <div class="doc">
-<a name="lab1"></a><h1 class="section">Лекция 1</h1>
+<a id="lab1"></a><h1 class="section">Лекция 1</h1>
 
 <div class="paragraph"> </div>
 
@@ -71,115 +71,85 @@
 
 <div class="paragraph"> </div>
 
-<a name="lab2"></a><h3 class="section">Введение импликации (В-&gt;). Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span>
-</h3>
+<a id="lab2"></a><h3 class="section">Введение импликации (В-&gt;). Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span></h3>
 
 <pre>
- Gamma, A |- B
----------------
-Gamma |- A -&gt; B
+ Gamma, A |- B---------------Gamma |- A -&gt; B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab3"></a><h3 class="section">Удаление импликации (У-&gt;), Модус Поненс
-</h3>
+<a id="lab3"></a><h3 class="section">Устранение импликации (У-&gt;), Модус Поненс</h3>
 
 <pre>
-Gamma |- A -&gt; B     Gamma |- A
------------------------------- 
-         Gamma |- B
+Gamma |- A -&gt; B     Gamma |- A------------------------------          Gamma |- B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab4"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">apply</span></span>
-</h3>
+<a id="lab4"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">apply</span></span></h3>
 
 В Coq чаще используется следующий аналог (У-&gt;)
 <pre>
-        Gamma |- A
---------------------------- 
-   Gamma, A -&gt; B |- B
+        Gamma |- A---------------------------    Gamma, A -&gt; B |- B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab5"></a><h3 class="section">Введение конъюнкции (В/\). Тактика <span class="inlinecode"><span class="id" title="tactic">split</span></span>
-</h3>
+<a id="lab5"></a><h3 class="section">Введение конъюнкции (В/\). Тактика <span class="inlinecode"><span class="id" title="tactic">split</span></span></h3>
 
 <pre>
-Gamma |- A     Gamma |- B
--------------------------
-     Gamma |- A /\ B
+Gamma |- A     Gamma |- B-------------------------     Gamma |- A /\ B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab6"></a><h3 class="section">Устранение конъюнкции (У/\)
-</h3>
+<a id="lab6"></a><h3 class="section">Устранение конъюнкции (У/\)</h3>
 
 <pre>
-Gamma |- A /\ B         Gamma |- A /\ B      
----------------         ---------------
-  Gamma |- A              Gamma |- B
+Gamma |- A /\ B         Gamma |- A /\ B      ---------------         ---------------  Gamma |- A              Gamma |- B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab7"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>
-</h3>
+<a id="lab7"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span></h3>
 
 В Coq используется следующий аналог (У/\)
 <pre>
-Gamma, A, B |- C
-------------------
-Gamma, A /\ B |- C
+Gamma, A, B |- C------------------Gamma, A /\ B |- C
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab8"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">left</span></span>
-</h3>
+<a id="lab8"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">left</span></span></h3>
 
 <pre>
-  Gamma |- A
----------------
-Gamma |- A \/ B
+  Gamma |- A---------------Gamma |- A \/ B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab9"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">right</span></span>
-</h3>
+<a id="lab9"></a><h3 class="section">Введение дизъюнкции (В\/). Тактика <span class="inlinecode"><span class="id" title="tactic">right</span></span></h3>
 
 <pre>
-  Gamma |- B
----------------
-Gamma |- A \/ B
+  Gamma |- B---------------Gamma |- A \/ B
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab10"></a><h3 class="section">Устранение дизъюнкции (У\/)
-</h3>
+<a id="lab10"></a><h3 class="section">Устранение дизъюнкции (У\/)</h3>
 
 <pre>
-Gamma |- A \/ B   Gamma, A |- C   Gamma, B |- C
-------------------------------------------------
-                Gamma |- C
+Gamma |- A \/ B   Gamma, A |- C   Gamma, B |- C------------------------------------------------                Gamma |- C
 </pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab11"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>
-</h3>
+<a id="lab11"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">destruct</span></span></h3>
 
 В Coq используется следующий аналог (У\/)
 <pre>
-Gamma, A |- C    Gamma, B |- C
-------------------------------
-       Gamma, A \/ B |- C
+Gamma, A |- C    Gamma, B |- C------------------------------       Gamma, A \/ B |- C
 </pre>
 
 <div class="paragraph"> </div>
@@ -192,13 +162,10 @@ Gamma, A |- C    Gamma, B |- C
 
 <div class="paragraph"> </div>
 
-<a name="lab12"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span>
-</h3>
+<a id="lab12"></a><h3 class="section">Тактика <span class="inlinecode"><span class="id" title="tactic">intro</span></span></h3>
 
 <pre>
-Gamma, A |- False
-------------------
-   Gamma |- ~A
+Gamma, A |- False------------------   Gamma |- ~A
 </pre>
 
 <div class="paragraph"> </div>
@@ -250,6 +217,8 @@ Gamma, A |- False
 
 <br/>
 <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
+
+<br/>
 
 <br/>
 </div>
@@ -345,11 +314,19 @@ Gamma, A |- False
 </div>
 
 <div class="doc">
-Далее следует доказательства двух подцелей. Начало доказательтва
-каждой подцели рекомендуется обозначить символом <span class="inlinecode">+</span>. В этом случае
-Coq выдаст ошибку, если к следующему + предыдущая подцель не была
-полностью доказана.  Можно строить вложенную структуру, используя
-символы <span class="inlinecode">*</span>, <span class="inlinecode">+</span>, <span class="inlinecode">-</span>, <span class="inlinecode">**</span>, <span class="inlinecode">++</span> и т.д., например:
+Далее следует доказательства двух подцелей. Начало доказательства
+каждой подцели рекомендуется обозначить символом <span class="inlinecode">+</span>. Это дает два
+преимущества. Во-первых, в файле с доказательством в виде
+последовательности тактик видно, где заканчивается доказательство
+одной подцели и начинается доказательство следующей. Во-вторых, Coq
+выдаст сообщение об ошибке, если к следующему <span class="inlinecode">+</span> предыдущая подцель
+не была полностью доказана. Это позволяет легче найти ошибку при
+изменении доказательства.
+
+<div class="paragraph"> </div>
+
+Можно строить вложенную структуру, используя символы <span class="inlinecode">*</span>, <span class="inlinecode">+</span>, <span class="inlinecode">-</span>,
+<span class="inlinecode">**</span>, <span class="inlinecode">++</span> и т.д., например:
 <br/>
 <span class="inlinecode">* <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
 &nbsp;&nbsp;+ <span class="id" title="tactic">split</span>.<br/>
@@ -357,6 +334,15 @@ Coq выдаст ошибку, если к следующему + предыду
 &nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">auto</span>.<br/>
 &nbsp;&nbsp;+ <span class="id" title="tactic">left</span>. <span class="id" title="tactic">trivial</span>.<br/>
 * <span class="id" title="tactic">assumption</span>.
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Вместо использования маркеров <span class="inlinecode">*</span>, <span class="inlinecode">+</span>, <span class="inlinecode">-</span> и т.д. можно заключить
+доказательство каждой подцели в фигурные скобки.
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;<span class="id" title="tactic">split</span>. { <span class="id" title="tactic">auto</span>. } { <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">auto</span>. }
 <div class="paragraph"> </div>
 
 </span>
@@ -393,6 +379,9 @@ Coq выдаст ошибку, если к следующему + предыду
 <br/>
 <span class="id" title="keyword">Fact</span> <span class="id" title="var">double_negation</span> : <span class="id" title="var">A</span> -&gt; ~~<span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
+
+<br/>
+<span class="id" title="tactic">unfold</span> <span class="id" title="var">not</span>.<br/>
 
 <br/>
 </div>
@@ -432,6 +421,7 @@ Coq выдаст ошибку, если к следующему + предыду
 <br/>
 <span class="id" title="keyword">Goal</span> <span class="id" title="var">A</span> &lt;-&gt; <span class="id" title="var">B</span>.<br/>
 <span class="id" title="tactic">unfold</span> <span class="id" title="var">iff</span>.<br/>
+<span class="id" title="tactic">split</span>.<br/>
 <span class="id" title="keyword">Abort</span>.<br/>
 
 <br/>
@@ -451,7 +441,7 @@ Coq выдаст ошибку, если к следующему + предыду
 </div>
 
 <div class="doc">
-<a name="lab13"></a><h1 class="section">Домашнее задание 1</h1>
+<a id="lab13"></a><h1 class="section">Домашнее задание 1</h1>
 
 </div>
 <div class="code">
@@ -495,7 +485,12 @@ Coq выдаст ошибку, если к следующему + предыду
 <span class="id" title="var">Admitted</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">disj_conj_distr</span> : <span class="id" title="var">A</span> \/ <span class="id" title="var">B</span> /\ <span class="id" title="var">C</span> &lt;-&gt; (<span class="id" title="var">A</span> \/ <span class="id" title="var">B</span>) /\ (<span class="id" title="var">A</span> \/ <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_intro</span> : <span class="id" title="var">A</span> -&gt; ~~<span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_elim</span> : ~~~<span class="id" title="var">A</span> -&gt; ~<span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
