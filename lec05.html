@@ -24,7 +24,7 @@
 </div>
 
 <div class="doc">
-<a name="lab1"></a><h1 class="section">Лекция 5. Лямбда-исчисление с простыми и зависимыми типами. Соответствие Карри-Говарда</h1>
+<a id="lab1"></a><h1 class="section">Лекция 5. Лямбда-исчисление с простыми и зависимыми типами. Соответствие Карри-Говарда</h1>
 
 </div>
 <div class="code">
@@ -37,7 +37,7 @@
 </div>
 
 <div class="doc">
-<a name="lab2"></a><h2 class="section">Бестиповое лямбда-исчисление (напоминание материала прошлого семестра)</h2>
+<a id="lab2"></a><h2 class="section">Бестиповое лямбда-исчисление (напоминание материала прошлого семестра)</h2>
 
 
 <div class="paragraph"> </div>
@@ -49,11 +49,12 @@
 Термы вида <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode"><span class="id" title="var">N</span></span> называются аппликацией, а <span class="inlinecode"><span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> —
 (лямбда-)абстракцией. Терм <span class="inlinecode"><span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> определяет анонимную
 функцию с формальным параметром (аргументом) <span class="inlinecode"><span class="id" title="var">x</span></span> и телом <span class="inlinecode"><span class="id" title="var">M</span></span>.
+В Coq терм <span class="inlinecode"><span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> записывается <span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">M</span></span>.
 
 <div class="paragraph"> </div>
 
 Аппликации группируется налево: <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode"><span class="id" title="var">N</span></span> <span class="inlinecode"><span class="id" title="var">K</span></span> есть <span class="inlinecode">(<span class="id" title="var">M</span></span> <span class="inlinecode"><span class="id" title="var">N</span>)</span> <span class="inlinecode"><span class="id" title="var">K</span></span>.
-<span class="inlinecode"><span class="id" title="var">λx</span></span> <span class="inlinecode"><span class="id" title="var">y</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> есть сокращение для <span class="inlinecode"><span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">λy</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span>.
+Запись <span class="inlinecode"><span class="id" title="var">λx</span></span> <span class="inlinecode"><span class="id" title="var">y</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> есть сокращение для <span class="inlinecode"><span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">λy</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -68,8 +69,8 @@
 
 <div class="paragraph"> </div>
 
-β-редукция: <span class="inlinecode">(<span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span>)</span> <span class="inlinecode"><span class="id" title="var">N</span></span> →<sub>β</sub> <span class="inlinecode"><span class="id" title="var">M</span>[<span class="id" title="var">N</span>/<span class="id" title="var">x</span>]</span>
-Терм <span class="inlinecode">(<span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span>)</span> <span class="inlinecode"><span class="id" title="var">N</span></span> переписывается в <span class="inlinecode"><span class="id" title="var">M</span>[<span class="id" title="var">N</span>/<span class="id" title="var">x</span>]</span>. Бета-редукция есть
+β-редукция: <span class="inlinecode">(<span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span>)</span> <span class="inlinecode"><span class="id" title="var">N</span></span> →<sub>β</sub> <span class="inlinecode"><span class="id" title="var">M</span>[<span class="id" title="var">N</span>/<span class="id" title="var">x</span>]</span>. Это означает,
+что терм <span class="inlinecode">(<span class="id" title="var">λx</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span>)</span> <span class="inlinecode"><span class="id" title="var">N</span></span> переписывается в <span class="inlinecode"><span class="id" title="var">M</span>[<span class="id" title="var">N</span>/<span class="id" title="var">x</span>]</span>. Бета-редукция есть
 бинарное отношение на термах.
 
 <div class="paragraph"> </div>
@@ -80,7 +81,7 @@
 
 <div class="paragraph"> </div>
 
-В Coq есть еще несколько типов редукций: они называются δ, ζ и ι.
+В Coq есть еще несколько типов редукций: они обозначаются буквами δ, ζ и ι.
 
 <div class="paragraph"> </div>
 
@@ -152,8 +153,11 @@
 пропозиционального равенства. 
 <div class="paragraph"> </div>
 
- Пример в лекции 7, слайд 10 из предыдущего семестра.
-На типы можно не обращать внимание. 
+ Пример в лекции 7, слайды 10-11 из предыдущего семестра про
+представление пар в чистом лямбда-исчислении. Эти слайды добавлены на
+<a href="https://source.unn.ru">source.unn.ru</a>. На типы,
+указанные в фигурных скобках и после двоеточий, можно пока не обращать
+внимание. 
 </div>
 <div class="code">
 
@@ -167,7 +171,7 @@
 <span class="id" title="keyword">Definition</span> <span class="id" title="var">Pair</span> {<span class="id" title="var">P</span>} := (<span class="id" title="var">A</span> → <span class="id" title="var">B</span> → <span class="id" title="var">P</span>) → <span class="id" title="var">P</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Definition</span> <span class="id" title="var">pair</span> {<span class="id" title="var">P</span>} <span class="id" title="var">x</span> <span class="id" title="var">y</span> : <span class="id" title="var">Pair</span> := <span class="id" title="keyword">fun</span> <span class="id" title="var">f</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span> → <span class="id" title="var">P</span> =&gt; <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>.<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">pair</span> {<span class="id" title="var">P</span>} (<span class="id" title="var">x</span> : <span class="id" title="var">A</span>) (<span class="id" title="var">y</span> : <span class="id" title="var">B</span>) := <span class="id" title="keyword">fun</span> <span class="id" title="var">f</span> =&gt; <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> : <span class="id" title="var">P</span>.<br/>
 
 <br/>
 <span class="id" title="keyword">Definition</span> <span class="id" title="var">fst</span> (<span class="id" title="var">p</span> : <span class="id" title="var">Pair</span>) := <span class="id" title="var">p</span> (<span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> =&gt; <span class="id" title="var">x</span>).<br/>
@@ -202,7 +206,7 @@
 упрощать термы со свободными переменными (в данном случае <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span>). 
 <div class="paragraph"> </div>
 
-<a name="lab3"></a><h2 class="section">Лямбда-исчисление с простыми типами</h2>
+<a id="lab3"></a><h2 class="section">Лямбда-исчисление с простыми типами</h2>
 
 
 <div class="paragraph"> </div>
@@ -225,23 +229,25 @@
 
 <div class="paragraph"> </div>
 
-<a name="lab4"></a><h3 class="section">Правила вывода</h3>
+<a id="lab4"></a><h3 class="section">Правила вывода</h3>
 
 
 <div class="paragraph"> </div>
 
-Контекст <span class="inlinecode"><span class="id" title="var">Γ</span></span> есть последовательность <span class="inlinecode"><span class="id" title="var">x1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A1</span>,</span> <span class="inlinecode"><span class="id" title="var">x2</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A2</span>,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">xn</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">An</span></span>,
-где <span class="inlinecode"><span class="id" title="var">xi</span></span> — переменные, <span class="inlinecode"><span class="id" title="var">Ai</span></span> — типы. Для исчисления с простыми типами
-контекст можно также рассматривать как множество, на для зависимых
-типов, рассматриваемых далее, последовательность переменных будет важна.
+Типовый контекст <span class="inlinecode"><span class="id" title="var">Γ</span></span> есть последовательность <span class="inlinecode"><span class="id" title="var">x1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A1</span>,</span> <span class="inlinecode"><span class="id" title="var">x2</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A2</span>,</span> <span class="inlinecode">...,</span>
+<span class="inlinecode"><span class="id" title="var">xn</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">An</span></span>, где <span class="inlinecode"><span class="id" title="var">xi</span></span> — переменные, <span class="inlinecode"><span class="id" title="var">Ai</span></span> — типы. Таким образом, контекст
+можно рассматривать как присваивание типов свободным переменным <span class="inlinecode"><span class="id" title="var">x1</span>,</span>
+<span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">xn</span></span>. Для исчисления с простыми типами контекст можно также
+рассматривать как множество, но для зависимых типов, рассматриваемых
+далее, последовательность переменных будет важна.
 
 <div class="paragraph"> </div>
 
 Выводимые суждения имеют вид <span class="inlinecode"><span class="id" title="var">Γ</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, где <span class="inlinecode"><span class="id" title="var">M</span></span> — терм, <span class="inlinecode"><span class="id" title="var">A</span></span> — тип.
 Для правил ниже выполняется утверждение: если <span class="inlinecode"><span class="id" title="var">Γ</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> выводится,
-то все свободные переменные терма <span class="inlinecode"><span class="id" title="var">M</span></span> встречаются в <span class="inlinecode"><span class="id" title="var">Γ</span></span>.
-Смысл: если свободные переменные в <span class="inlinecode"><span class="id" title="var">M</span></span> имеют типы, как указано в <span class="inlinecode"><span class="id" title="var">Γ</span></span>, то
-терм <span class="inlinecode"><span class="id" title="var">M</span></span> имеет тип <span class="inlinecode"><span class="id" title="var">A</span></span>.
+то все свободные переменные терма <span class="inlinecode"><span class="id" title="var">M</span></span> встречаются в <span class="inlinecode"><span class="id" title="var">Γ</span></span>. Смысл
+суждения таков: если свободные переменные в <span class="inlinecode"><span class="id" title="var">M</span></span> имеют типы, как
+указано в <span class="inlinecode"><span class="id" title="var">Γ</span></span>, то терм <span class="inlinecode"><span class="id" title="var">M</span></span> имеет тип <span class="inlinecode"><span class="id" title="var">A</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -254,20 +260,20 @@
 -------------------------------- (<span class="id" title="var">Abs</span>)<br/>
 <span class="id" title="var">Γ</span> |- (<span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">M</span>) : <span class="id" title="var">A</span> → <span class="id" title="var">B</span><br/>
 <br/>
-<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>    <span class="id" title="var">Γ</span> |- <span class="id" title="var">N</span> : <span class="id" title="var">A</span><br/>
------------------------------- (<span class="id" title="var">App</span>)<br/>
+<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>     <span class="id" title="var">Γ</span> |- <span class="id" title="var">N</span> : <span class="id" title="var">A</span><br/>
+------------------------------- (<span class="id" title="var">App</span>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> <span class="id" title="var">N</span> : <span class="id" title="var">B</span>
 <div class="paragraph"> </div>
 
 </span>
 <div class="paragraph"> </div>
 
-<a name="lab5"></a><h4 class="section">Обозначение в Coq</h4>
+<a id="lab5"></a><h4 class="section">Обозначение в Coq</h4>
 
 
 <div class="paragraph"> </div>
 
-<span class="inlinecode"><span class="id" title="var">λx</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> записывается <span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">M</span></span> 
+<span class="inlinecode"><span class="id" title="var">λx</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">M</span></span> записывается <span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">M</span></span>. 
 </div>
 <div class="code">
 
@@ -352,56 +358,65 @@
 
 <div class="paragraph"> </div>
 
-<pre>
-  --------------- (Var)
-   x : A |- x : A
------------------------ (Abs)
-|- (λx : A. x) : A -&gt; A
-</pre>
-
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;--------------- (<span class="id" title="var">Var</span>)<br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="var">x</span> : <span class="id" title="var">A</span> |- <span class="id" title="var">x</span> : <span class="id" title="var">A</span><br/>
+----------------------- (<span class="id" title="var">Abs</span>)<br/>
+|- (<span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">x</span>) : <span class="id" title="var">A</span> → <span class="id" title="var">A</span>
 <div class="paragraph"> </div>
 
-<pre>
-   --------------------- (Var)
-   x : A, y : B |- x : A
-  ---------------------------- (Abs)
-   x : A |- (λy : B. x) : B -&gt; A
------------------------------------- (Abs)
-|- (λx : A. λy : B. x) : A -&gt; B -&gt; A
-</pre>
+</span>
+<div class="paragraph"> </div>
 
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;--------------------- (<span class="id" title="var">Var</span>)<br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="var">x</span> : <span class="id" title="var">A</span>, <span class="id" title="var">y</span> : <span class="id" title="var">B</span> |- <span class="id" title="var">x</span> : <span class="id" title="var">A</span><br/>
+&nbsp;&nbsp;---------------------------- (<span class="id" title="var">Abs</span>)<br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="var">x</span> : <span class="id" title="var">A</span> |- (<span class="id" title="var">λy</span> : <span class="id" title="var">B</span>. <span class="id" title="var">x</span>) : <span class="id" title="var">B</span> → <span class="id" title="var">A</span><br/>
+------------------------------------ (<span class="id" title="var">Abs</span>)<br/>
+|- (<span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">λy</span> : <span class="id" title="var">B</span>. <span class="id" title="var">x</span>) : <span class="id" title="var">A</span> → <span class="id" title="var">B</span> → <span class="id" title="var">A</span>
+<div class="paragraph"> </div>
+
+</span>
 <div class="paragraph"> </div>
 
 В следующем выводе Γ обозначает контекст <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">C</span>,</span> <span class="inlinecode"><span class="id" title="var">g</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span>,</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span>.
-<pre>
-                            --------------- (Var)  ---------- (Var)
-                            Γ |- g : A -&gt; B       Γ |- x : A
-    --------------- (Var)   --------------------------------
-     Γ |- f : B -&gt; C              Γ |- g x : B
-    -------------------------------------------- (App)
-    f : B -&gt; C, g : A -&gt; B, x : A |- f (g x) : C
-  ---------------------------------------------------- (Abs)
-    f : B -&gt; C, g : A -&gt; B |- λx : A. f (g x) : A -&gt; C
---------------------------------------------------------------- (Abs)
-f : B -&gt; C |- λg : A -&gt; B. λx : A. f (g x) : (A -&gt; B) -&gt; A -&gt; C
---------------------------------------------------------------- (Abs)
-|- λf : B -&gt; C. λg : A -&gt; B. λx : A. f (g x) :
-     (B -&gt; C) -&gt; (A -&gt; B) -&gt; A -&gt; C
-</pre>
 
 <div class="paragraph"> </div>
 
-<a name="lab6"></a><h2 class="section">Соответствие Карри-Говарда </h2>
+<br/>
+<span class="inlinecode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------- (<span class="id" title="var">Var</span>)  --------- (<span class="id" title="var">Var</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- <span class="id" title="var">g</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>        <span class="id" title="var">Γ</span> |- <span class="id" title="var">x</span> : <span class="id" title="var">A</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;--------------- (<span class="id" title="var">Var</span>)   --------------------------------<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- <span class="id" title="var">f</span> : <span class="id" title="var">B</span> → <span class="id" title="var">C</span>                <span class="id" title="var">Γ</span> |- <span class="id" title="var">g</span> <span class="id" title="var">x</span> : <span class="id" title="var">B</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;-------------------------------------------- (<span class="id" title="var">App</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">f</span> : <span class="id" title="var">B</span> → <span class="id" title="var">C</span>, <span class="id" title="var">g</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>, <span class="id" title="var">x</span> : <span class="id" title="var">A</span> |- <span class="id" title="var">f</span> (<span class="id" title="var">g</span> <span class="id" title="var">x</span>) : <span class="id" title="var">C</span><br/>
+&nbsp;&nbsp;---------------------------------------------------- (<span class="id" title="var">Abs</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">f</span> : <span class="id" title="var">B</span> → <span class="id" title="var">C</span>, <span class="id" title="var">g</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span> |- <span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">f</span> (<span class="id" title="var">g</span> <span class="id" title="var">x</span>) : <span class="id" title="var">A</span> → <span class="id" title="var">C</span><br/>
+----------------------------------------------------------- (<span class="id" title="var">Abs</span>)<br/>
+<span class="id" title="var">f</span> : <span class="id" title="var">B</span> → <span class="id" title="var">C</span> |- <span class="id" title="var">λg</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>. <span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">f</span> (<span class="id" title="var">g</span> <span class="id" title="var">x</span>) : (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → <span class="id" title="var">A</span> → <span class="id" title="var">C</span><br/>
+----------------------------------------------------------- (<span class="id" title="var">Abs</span>)<br/>
+|- <span class="id" title="var">λf</span> : <span class="id" title="var">B</span> → <span class="id" title="var">C</span>. <span class="id" title="var">λg</span> : <span class="id" title="var">A</span> → <span class="id" title="var">B</span>. <span class="id" title="var">λx</span> : <span class="id" title="var">A</span>. <span class="id" title="var">f</span> (<span class="id" title="var">g</span> <span class="id" title="var">x</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → <span class="id" title="var">A</span> → <span class="id" title="var">C</span>
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+<a id="lab6"></a><h2 class="section">Соответствие Карри-Говарда</h2>
 
 
 <div class="paragraph"> </div>
 
-Типы замкнутых термов (то есть тип <span class="inlinecode"><span class="id" title="var">A</span></span> в выводимом суждении
-<span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span>) есть тавтологии пропозициональной логики, если <span class="inlinecode">→</span>
-рассматривать как импликацию, а базовые типы — как пропозициональные
-переменные. Это потому, что если в правилах вывода стереть термы и
-оставить только типы, то полученные правила будут корректны с точки
-зрения логики. Правило
+Типы замкнутых термов (то есть тип <span class="inlinecode"><span class="id" title="var">A</span></span> в выводимом суждении <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span>
+<span class="inlinecode"><span class="id" title="var">A</span></span>) есть тавтологии пропозициональной логики, если <span class="inlinecode">→</span> рассматривать
+как импликацию, а базовые типы — как пропозициональные переменные. Это
+потому, что если в правилах вывода стереть термы и оставить только
+типы, то полученные правила будут корректны с точки зрения логики.
+
+<div class="paragraph"> </div>
+
+Правило
 
 <div class="paragraph"> </div>
 
@@ -412,7 +427,29 @@ f : B -&gt; C |- λg : A -&gt; B. λx : A. f (g x) : (A -&gt; B) -&gt; A -&gt; C
 <div class="paragraph"> </div>
 
 </span>называется корректным, если из <span class="inlinecode"><span class="id" title="var">Γ</span></span> <span class="inlinecode">|=</span> <span class="inlinecode"><span class="id" title="var">A</span></span> следует <span class="inlinecode"><span class="id" title="var">Δ</span></span> <span class="inlinecode">|=</span> <span class="inlinecode"><span class="id" title="var">B</span></span>.
-На самом деле, получаются правила натурального вывода.
+
+<div class="paragraph"> </div>
+
+Действительно, если из правил вывода, приведенных выше, стереть термы, то получится следующее.
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="var">Γ</span>, <span class="id" title="var">A</span> |- <span class="id" title="var">A</span> (<span class="id" title="var">Var</span>)<br/>
+<br/>
+&nbsp;<span class="id" title="var">Γ</span>, <span class="id" title="var">A</span> |- <span class="id" title="var">B</span><br/>
+------------ (<span class="id" title="var">Abs</span>)<br/>
+<span class="id" title="var">Γ</span> |- <span class="id" title="var">A</span> → <span class="id" title="var">B</span><br/>
+<br/>
+<span class="id" title="var">Γ</span> |- <span class="id" title="var">A</span> → <span class="id" title="var">B</span>     <span class="id" title="var">Γ</span> |- <span class="id" title="var">A</span><br/>
+---------------------- (<span class="id" title="var">App</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- <span class="id" title="var">B</span>
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Это правила натурального вывода пропозициональной логики.
 
 <div class="paragraph"> </div>
 
@@ -459,7 +496,7 @@ Coq построен на соответствии Карри-Говарда. Е
 
 <div class="paragraph"> </div>
 
-<a name="lab7"></a><h2 class="section">Лямбда-исчисления с зависимыми типами</h2>
+<a id="lab7"></a><h2 class="section">Лямбда-исчисление с зависимыми типами</h2>
 
 
 <div class="paragraph"> </div>
@@ -482,7 +519,7 @@ Coq построен на соответствии Карри-Говарда. Е
 
 <div class="paragraph"> </div>
 
-<a name="lab8"></a><h3 class="section">Правила вывода</h3>
+<a id="lab8"></a><h3 class="section">Правила вывода</h3>
 
 
 <div class="paragraph"> </div>
@@ -496,7 +533,7 @@ Coq построен на соответствии Карри-Говарда. Е
 ----------------------------- (<span class="id" title="var">Abs</span>)<br/>
 <span class="id" title="var">Γ</span> |- (<span class="id" title="var">λx</span> : <span class="id" title="var">A</span>, <span class="id" title="var">M</span>) : ∀<span class="id" title="var">x</span> : <span class="id" title="var">A</span>, <span class="id" title="var">B</span><br/>
 <br/>
-<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> : ∀<span class="id" title="var">x</span> : <span class="id" title="var">A</span>, <span class="id" title="var">B</span>    <span class="id" title="var">Γ</span> |- <span class="id" title="var">N</span> : <span class="id" title="var">A</span><br/>
+<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> : ∀<span class="id" title="var">x</span> : <span class="id" title="var">A</span>, <span class="id" title="var">B</span>    <span class="id" title="var">Γ</span> |- <span class="id" title="var">N</span> : <span class="id" title="var">A</span><br/>
 --------------------------------- (<span class="id" title="var">App</span>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> <span class="id" title="var">N</span> : <span class="id" title="var">B</span>[<span class="id" title="var">N</span>/<span class="id" title="var">x</span>]
 <div class="paragraph"> </div>
@@ -526,12 +563,12 @@ Coq построен на соответствии Карри-Говарда. Е
 
 <div class="paragraph"> </div>
 
-Почему <span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">B</span></span> называется зависимым _произведением_? Это основано на
+Почему <span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">B</span></span> называется зависимым <em>произведением</em>? Это основано на
 следующем факте из теории множеств. Пусть <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=</span> <span class="inlinecode">{1,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">n</span>}</span> и пусть <span class="inlinecode"><span class="id" title="var">A</span></span>
 <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span> обозначает множество всех функций из <span class="inlinecode"><span class="id" title="var">A</span></span> в <span class="inlinecode"><span class="id" title="var">B</span></span> (также
 обозначается через <span class="inlinecode"><span class="id" title="var">B</span>^<span class="id" title="var">A</span></span>, так как <span class="inlinecode">|<span class="id" title="var">B</span>^<span class="id" title="var">A</span>|</span> <span class="inlinecode">=</span> <span class="inlinecode">|<span class="id" title="var">B</span>|^|<span class="id" title="var">A</span>|</span>). Тогда существует
 взаимно-однозначное соответствие между декартовым произведением <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>
-<span class="inlinecode">...</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span> (<span class="inlinecode"><span class="id" title="var">n</span></span> раз) и <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span>. Действительно, Каждую функцию из <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span>
+<span class="inlinecode">...</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span> (<span class="inlinecode"><span class="id" title="var">n</span></span> раз) и <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span>. Действительно, каждую функцию из <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span>
 можно рассматривать как кортеж <span class="inlinecode"><span class="id" title="var">f</span>(1),</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">f</span>(<span class="id" title="var">n</span>)</span> элементов <span class="inlinecode"><span class="id" title="var">B</span></span>.
 
 <div class="paragraph"> </div>
@@ -556,7 +593,7 @@ Coq построен на соответствии Карри-Говарда. Е
 
 <div class="paragraph"> </div>
 
-<a name="lab9"></a><h4 class="section">Обозначение в Coq</h4>
+<a id="lab9"></a><h4 class="section">Обозначение в Coq</h4>
 
 
 <div class="paragraph"> </div>
@@ -591,7 +628,7 @@ Coq построен на соответствии Карри-Говарда. Е
 Построим пример зависимого произведения и соответствующего терма. 
 <div class="paragraph"> </div>
 
- Семейство из двух типов: B true = nat и B false = unit 
+ Семейство из двух типов: B true = nat и B false = unit. 
 </div>
 <div class="code">
 
@@ -626,7 +663,7 @@ Coq построен на соответствии Карри-Говарда. Е
 </div>
 
 <div class="doc">
-<a name="lab10"></a><h3 class="section">Использование соответствия Карри-Говарда в доказательствах </h3>
+<a id="lab10"></a><h3 class="section">Использование соответствия Карри-Говарда в доказательствах</h3>
 
 
 <div class="paragraph"> </div>
@@ -648,10 +685,23 @@ CoqIDE, есть суждение, где горизонтальная черт�
 Таким образом, цель в правом верхнем окне CoqIDE, показывает
 переменные с их типами над горизонтальной линией, а также тип, терм
 которого нужно построить, или, эквивалентно, теорему, доказательство
-которой нужно построить. 
+которой нужно написать.
+
 <div class="paragraph"> </div>
 
-<a name="lab11"></a><h3 class="section">Пример использования соответствия Карри-Говарда в доказательстве (теорема из лекции 4)</h3>
+Лямбда-исчисление с типами (особенно с зависимыми) называется теорией
+типов. Оно служит математическим основанием Coq и многих других
+автоматизированных систем доказательств. Теория типов, где из общего
+пропозиционального равенства выделено разрешимое равенство по
+определению, называется интенсиональной. В ней система может
+автоматически проверить, имеет ли данный терм некоторый тип и найти
+этот тип. Теория типов, где есть только пропозициональное равенство,
+называется экстенсиональной. Проверка типизируемости в ней
+неразрешима, но некоторые математические конструкции записываются
+более просто. 
+<div class="paragraph"> </div>
+
+<a id="lab11"></a><h3 class="section">Пример использования соответствия Карри-Говарда в доказательстве (теорема из лекции 4)</h3>
 
 </div>
 <div class="code">
@@ -672,7 +722,7 @@ CoqIDE, есть суждение, где горизонтальная черт�
 </div>
 
 <div class="doc">
-Печатается теорема выше 
+Печатается теорема выше. 
 </div>
 <div class="code">
 <span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_n_Sm_le</span> <span class="id" title="var">m</span>).<br/>
@@ -707,8 +757,11 @@ CoqIDE, есть суждение, где горизонтальная черт�
 </div>
 
 <div class="doc">
-Появилась посылка <span class="inlinecode"><span class="id" title="var">H1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>  Вместо последней тактики можно использовать следующую комбинацию
-assert и specialize.
+Появилась посылка <span class="inlinecode"><span class="id" title="var">H1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span> 
+<div class="paragraph"> </div>
+
+ Вместо последней тактики можно использовать следующую комбинацию
+<span class="inlinecode"><span class="id" title="tactic">assert</span></span> и <span class="inlinecode"><span class="id" title="tactic">specialize</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -745,7 +798,7 @@ m &lt; n \/ m = n
 </div>
 
 <div class="doc">
-<a name="lab12"></a><h2 class="section">Домашнее задание.</h2>
+<a id="lab12"></a><h2 class="section">Домашнее задание</h2>
 
 
 <div class="paragraph"> </div>
@@ -801,19 +854,19 @@ m &lt; n \/ m = n
 
 <div class="paragraph"> </div>
 
-Definition t1 : 0 &lt; 1 := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t1</span></span> <span class="inlinecode">:</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode">1</span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
-Definition t2 : 0 &lt; 0 := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t2</span></span> <span class="inlinecode">:</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode">0</span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
-Definition t3 : 2 * 2 = 5 -&gt; 0 &lt; 0 := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t3</span></span> <span class="inlinecode">:</span> <span class="inlinecode">2</span> <span class="inlinecode">*</span> <span class="inlinecode">2</span> <span class="inlinecode">=</span> <span class="inlinecode">5</span> <span class="inlinecode">→</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode">0</span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
-Definition t4 : forall x, 1 &lt; x -&gt; 0 &lt; x := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t4</span></span> <span class="inlinecode">:</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
@@ -824,11 +877,11 @@ Definition t4 : forall x, 1 &lt; x -&gt; 0 &lt; x := ...
 
 <div class="paragraph"> </div>
 
-Definition t5 : False := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t5</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">False</span></span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
-Definition t6 : forall P : Prop, P := ...
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t6</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Prop</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 </div>
 <div class="code">
@@ -847,26 +900,26 @@ Definition t6 : forall P : Prop, P := ...
 аналогом операции зависимой суммы со стороны логики? 
 <div class="paragraph"> </div>
 
-<a name="lab13"></a><h3 class="section">Дальнейшая информация о бестиповом и тИповом лямбда-исчислении</h3>
+<a id="lab13"></a><h3 class="section">Дальнейшая информация о бестиповом и типовом лямбда-исчислении</h3>
 
 
 <div class="paragraph"> </div>
 
 Лекции по функциональному программированию.
 Разделы 2, 3 до 3.6 и 6 до 6.1 включительно
-(см. source.unn.ru).
+(см. <a href="https://source.unn.ru">source.unn.ru</a>).
 
 <div class="paragraph"> </div>
 
 Пирс Б. Типы в языках программирования. 2011.
 Разделы 5.1, 9.1-9.2.
-<a href="http://newstar.rinet.ru/~goga/tapl">http://newstar.rinet.ru/~goga/tapl</a>
+<a href="http://newstar.rinet.ru/~goga/tapl">http://newstar.rinet.ru/~goga/tapl</a>.
 
 <div class="paragraph"> </div>
 
 Крупский В.Н., Кузнецов С.Л. Компьютерный практикум по математической логике: Coq.
 Разделы 1.1-1.2.
-<a href="http://www.mi.ras.ru/~sk/lehre/coq">http://www.mi.ras.ru/~sk/lehre/coq</a> 
+<a href="http://www.mi.ras.ru/~sk/lehre/coq">http://www.mi.ras.ru/~sk/lehre/coq</a>. 
 </div>
 <div class="code">
 </div>
