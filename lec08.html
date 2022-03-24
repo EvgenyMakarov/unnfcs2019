@@ -1,0 +1,523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>lec07</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<div class="code">
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab1"></a><h1 class="section">Лекция 7. Индукция с несколькими базами. Определение и упрощение рекурсивных функций. Дополнительные тактики</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">Arith</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">Lia</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">Bool</span>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">Nat</span> <span class="id" title="var">Peano</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab2"></a><h2 class="section">Индукция с несколькими базами</h2>
+
+<div class="paragraph"> </div>
+
+ Иногда в доказательстве по индукции нужно рассмотреть несколько баз
+и начать шаг индукции не с нуля, а с положительного числа. Например,
+можно доказать, что любую сумму, начиная с 4 пенсов, можно разменять
+монетами по 2 и 5 пенсов. Утверждение
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">∀</span> <span class="id" title="var">p</span>, 4 ≤ <span class="id" title="var">p</span> → <span class="id" title="tactic">exists</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">p</span> = 2 * <span class="id" title="var">m</span> + 5 * <span class="id" title="var">n</span>.
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+можно доказать индукцией с базами для <span class="inlinecode"><span class="id" title="var">p</span></span> от <span class="inlinecode">0</span> до <span class="inlinecode">8</span> и шагом для <span class="inlinecode">9</span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">p</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="keyword">Induction</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">P</span> : <span class="id" title="var">nat</span> → <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Предположим, нужно доказать <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>.  Доказательство проходит
+по индукции, но предположим, что шаг индукции <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> можно
+доказать только для <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span>. В этом случае нужно отдельно доказать две
+базы: <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">0</span> и <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">1</span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">step</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, 0 &lt; <span class="id" title="var">n</span> → <span class="id" title="var">P</span> <span class="id" title="var">n</span> → <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">base0</span> : <span class="id" title="var">P</span> 0.<br/>
+<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">base1</span> : <span class="id" title="var">P</span> 1.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+* <span class="id" title="tactic">assumption</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Во второй подцели нужно доказать <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> из <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>. Применение <span class="inlinecode"><span class="id" title="var">step</span></span>
+ничего не даст из-за посылки <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span>, которую мы не можем доказать.
+Здесь можно применить индукцию еще раз. Базой новой индукции будет <span class="inlinecode"><span class="id" title="var">P</span></span>
+<span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">0)</span>, то есть <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">1</span>, предположением индукции — <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>, а
+доказать нужно <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span>. Последнее утверждение следует
+непосредственно из <span class="inlinecode"><span class="id" title="var">step</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH1</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">step</span>. { <span class="id" title="tactic">apply</span> <span class="id" title="var">lt_0_succ</span>. } { <span class="id" title="tactic">assumption</span>. }<br/>
+<br/>
+</div>
+
+<div class="doc">
+Фигурные скобки, как и <span class="inlinecode">*</span>, <span class="inlinecode">+</span> и т.п. показывают, что доказываются
+две разных подцели. Они не обязательны, но желательны. 
+</div>
+<div class="code">
+<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+На самом деле, предположение одной из двух индукции (<span class="inlinecode"><span class="id" title="var">IH</span></span> или <span class="inlinecode"><span class="id" title="var">IH1</span></span>)
+обычно не нужно. Можно рассмотреть частный случай аксиомы индукции,
+где шаг индукции не использует предположение.
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="var">P</span> 0 → (<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) → <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>. (1)
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Посылка <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> — это более сильное утверждение, чем
+обычный шаг индукции <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. Следовательно,
+формула (1) есть более слабое утверждение, чем обычная аксиома
+индукции
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="var">P</span> 0 → (<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span> → <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) → <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Формула (1) говорит, что все числа имеют вид либо <span class="inlinecode">0</span>, либо <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> для
+некоторого <span class="inlinecode"><span class="id" title="var">n</span></span>, поэтому для доказательства <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> нужно
+рассмотреть оба этих случая.
+
+<div class="paragraph"> </div>
+
+Это утверждение удобно применять тактикой <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>. На цели <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>
+эта тактика производит две подцели: <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">0</span> и <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. Как и в случае
+с <span class="inlinecode"><span class="id" title="tactic">induction</span></span>, можно задать имя новой переменной во второй подцели:
+<span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[|</span> <span class="inlinecode"><span class="id" title="var">n</span>]</span>.
+
+<div class="paragraph"> </div>
+
+Докажем <span class="inlinecode"><span class="id" title="var">P_holds</span></span> еще раз, используя <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> вместо первой индукции. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds'</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
+* <span class="id" title="tactic">assumption</span>.<br/>
+* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">step</span>; [ <span class="id" title="tactic">apply</span> <span class="id" title="var">lt_0_succ</span> | <span class="id" title="tactic">assumption</span>].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Можно было бы также использовать <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> вместо второй индукции.
+
+<div class="paragraph"> </div>
+
+Альтернативно можно доказать дизъюнкцию вида <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode">0</span> <span class="inlinecode">∨</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span> в шаге индукции
+и рассмотреть разные случаи. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds''</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>]; [<span class="id" title="tactic">assumption</span> |].<br/>
+<span class="id" title="tactic">assert</span> (<span class="id" title="var">H</span> : <span class="id" title="var">n</span> = 0 ∨ 0 &lt; <span class="id" title="var">n</span>) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>].<br/>
++ <span class="id" title="tactic">subst</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">assumption</span>.<br/>
++ <span class="id" title="tactic">auto</span>.<br/>
+</div>
+
+<div class="doc">
+Тактика <span class="inlinecode"><span class="id" title="tactic">auto</span></span> многократно применяет правило Modus Ponens. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="keyword">Induction</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab3"></a><h2 class="section">Определение и упрощение рекурсивных функций</h2>
+
+
+<div class="paragraph"> </div>
+
+В Coq можно определить только функции, которые заведомо
+останавливаются на любых аргументах. Это свойство необходимо для
+корректности логики и разрешимости проверки типов. Оно гарантируется
+тем, что аргумент рекурсивного вызова доложен быть переменной, которая
+является непосредственным подтермом исходного аргумента. Например,
+если исходный аргумент <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется в конструкции <span class="inlinecode"><span class="id" title="keyword">match</span></span> с
+термом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>, то аргументом рекурсивного вызова может быть только <span class="inlinecode"><span class="id" title="var">m</span></span>.
+
+<div class="paragraph"> </div>
+
+Это, конечно, сильно ограничивает способы реализации алгоритмов. (На
+самом деле из-за выразительной системы типов в Coq это ограничение
+можно обойти и определить любую рекурсию, если заведомо известно, что
+она завершается.) 
+<div class="paragraph"> </div>
+
+ Рассмотрим следующую функцию. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">f</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ 6<br/>
+| 1 ⇒ 0<br/>
+| <span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">p</span> <span class="id" title="keyword">as</span> <span class="id" title="var">k</span>) ⇒ <span class="id" title="var">f</span> <span class="id" title="var">k</span> + 2<br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Вместо <span class="inlinecode"><span class="id" title="var">p</span></span> можно написать _, который подчеркивает тот факт, что эта
+переменная не используется в правой части.
+
+<div class="paragraph"> </div>
+
+Образец <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode"><span class="id" title="var">k</span>)</span> означает, что <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>
+(в частности, <span class="inlinecode">2</span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>) и подтерму <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> (то есть <span class="inlinecode"><span class="id" title="var">n</span>-1</span>)
+одновременно дается имя <span class="inlinecode"><span class="id" title="var">k</span></span>. Строчка <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span> <span class="inlinecode">⇒</span> <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span> в
+<span class="inlinecode"><span class="id" title="keyword">match</span></span> не проходит, несмотря на то, что <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> есть подтерм <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>,
+так как аргументом рекурсивного вызова должна быть переменная.
+
+<div class="paragraph"> </div>
+
+Вот другой вариант определения <span class="inlinecode"><span class="id" title="var">f</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">f'</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ 6<br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="keyword">match</span> <span class="id" title="var">k</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| 0 ⇒ 0<br/>
+&nbsp;&nbsp;| <span class="id" title="var">S</span> <span class="id" title="var">p</span> ⇒ <span class="id" title="var">f'</span> <span class="id" title="var">k</span> + 2<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Рассмотрим вычисление НОД с помощью алгоритма Евклида. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">gcd</span> (<span class="id" title="var">a</span> <span class="id" title="var">b</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">b</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ <span class="id" title="var">a</span> <br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="var">gcd</span> <span class="id" title="var">b</span> (<span class="id" title="var">a</span> <span class="id" title="var">mod</span> <span class="id" title="var">S</span> <span class="id" title="var">k</span>) <br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Нотация <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> означает <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span>. Рекурсия идет по второму аргументу,
+и на первый взгляд <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">k</span>)</span> не является подтермом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span>. Действительно,
+это определение не принималось в прежних версиях Coq, но с учетом равенства
+по определению функцию <span class="inlinecode"><span class="id" title="var">modulo</span></span> удалось определить так, что сейчас ограничение
+на аргумент рекурсивного вызова выполняется. 
+<div class="paragraph"> </div>
+
+ В качестве конкретного примера доказательства по индукции
+рассмотрим следующее утверждение. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Print</span> <span class="id" title="var">Even</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">Even</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">⇒</span> <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode">2</span> <span class="inlinecode">*</span> <span class="inlinecode"><span class="id" title="var">m</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">f_even</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">Even</span> (<span class="id" title="var">f</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
+* <span class="id" title="tactic">unfold</span> <span class="id" title="var">Even</span>. <span class="id" title="tactic">simpl</span> <span class="id" title="var">f</span>. &nbsp;&nbsp;<span class="id" title="tactic">exists</span> 3. <span class="id" title="tactic">trivial</span>.<br/>
+* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span> <span class="id" title="var">f</span>. <span class="id" title="tactic">exists</span> 0; <span class="id" title="tactic">trivial</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+После этой тактики терм <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> преобразовался не в желаемый
+<span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>, а в непонятный на первый взгляд терм
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ 0<br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">_</span> ⇒ <span class="id" title="var">f</span> <span class="id" title="var">n</span> + 2<br/>
+<span class="id" title="keyword">end</span> + 2.
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Это произошло, потому что упрощение <span class="inlinecode"><span class="id" title="var">f</span></span> было сделано два раза. Сначала
+действительно <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> преобразовался в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>, но затем
+Coq попытался упростить <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> еще раз. Поскольку <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> точно
+отличен от <span class="inlinecode">0</span>, первый вариант в определении <span class="inlinecode"><span class="id" title="var">f</span></span> не применяется. Зато
+<span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> может сопоставляться как с <span class="inlinecode">1</span>, то есть с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">0</span>, так и с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span>
+<span class="inlinecode"><span class="id" title="var">p</span>)</span>. При этом <span class="inlinecode"><span class="id" title="var">n</span></span> будет равно <span class="inlinecode">0</span> или <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span>, соответственно. Поэтому
+<span class="inlinecode"><span class="id" title="keyword">match</span></span> с этими двумя вариантами остается.
+
+<div class="paragraph"> </div>
+
+Отменим доказательство. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Abort</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Чтобы предотвратить развертывание <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>, можно поступить двумя
+способами. Следующая команда запрещает упрощать <span class="inlinecode"><span class="id" title="var">f</span></span>, если при этом
+на верхний уровень выходит <span class="inlinecode"><span class="id" title="keyword">match</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="var">Arguments</span> <span class="id" title="var">f</span> <span class="id" title="var">n</span> : <span class="id" title="tactic">simpl</span> <span class="id" title="var">nomatch</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Здесь <span class="inlinecode"><span class="id" title="var">n</span></span> — тот идентификатор, который на самом деле использовался
+как аргумент <span class="inlinecode"><span class="id" title="var">f</span></span> в определении. 
+<div class="paragraph"> </div>
+
+ Следующее утверждение неверно и используется только для тестирования. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = 0.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">simpl</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Переписывает <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Abort</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Второй способ состоит в определении леммы. В этом случае упрощение
+происходит переписыванием с использование пропозиционального
+равенства, а не равенства по определению, как в <span class="inlinecode"><span class="id" title="tactic">simpl</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">f_simpl</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = <span class="id" title="var">f</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) + 2.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = 0.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">f_simpl</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Переписывает <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Abort</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Повторяем попытку доказать f_even. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">f_even</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">Even</span> (<span class="id" title="var">f</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
+* <span class="id" title="tactic">exists</span> 3; <span class="id" title="tactic">trivial</span>.<br/>
+* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">exists</span> 0; <span class="id" title="tactic">trivial</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">IH</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">m</span> <span class="id" title="var">IH</span>]. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">IH</span>. <span class="id" title="tactic">exists</span> (<span class="id" title="var">m</span> + 1). <span class="id" title="tactic">ring</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab4"></a><h2 class="section">Дополнительные тактики</h2>
+
+<div class="paragraph"> </div>
+
+<a name="lab5"></a><h3 class="section">Доказательство целей с ложной посылкой</h3>
+
+<div class="paragraph"> </div>
+
+ Если посылка <span class="inlinecode"><span class="id" title="var">H</span></span> представляет собой равенство двух термов, которые
+начинаются с разных конструкторов, например, <span class="inlinecode">0</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">0</span> или <span class="inlinecode"><span class="id" title="var">true</span></span> <span class="inlinecode">=</span>
+<span class="inlinecode"><span class="id" title="var">false</span></span>, то можно воспользоваться тактиками <span class="inlinecode"><span class="id" title="tactic">discriminate</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> или
+<span class="inlinecode"><span class="id" title="var">simplify_eq</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="var">true</span> = <span class="id" title="var">false</span> → 2 + 2 = 5.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">discriminate</span> <span class="id" title="var">H</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Если посылка есть ложное бескванторное арифметическое равенство или
+неравенство, то цель доказывается тактикой <span class="inlinecode"><span class="id" title="var">lia</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span>, <span class="id" title="var">x</span> + 1 &lt; <span class="id" title="var">x</span> → 2 + 2 = 5.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">H</span>. <span class="id" title="var">lia</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Если посылка имеет вид <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode">¬<span class="id" title="var">A</span></span>, где <span class="inlinecode"><span class="id" title="var">A</span></span> истинно, то тактика <span class="inlinecode"><span class="id" title="var">contradict</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span>
+заменяет даную цель на <span class="inlinecode"><span class="id" title="var">A</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Goal</span> ¬<span class="id" title="var">Even</span> 2 → 2 + 2 = 5.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="var">contradict</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">exists</span> 1; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Можно также воспользоваться тактикой <span class="inlinecode"><span class="id" title="var">exfalso</span></span>, которая заменяет
+текущую цель на <span class="inlinecode"><span class="id" title="var">False</span></span>. Если вспомнить, что <span class="inlinecode">¬<span class="id" title="var">A</span></span> есть сокращение для <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span>
+<span class="inlinecode"><span class="id" title="var">False</span></span>, то далее можно использовать <span class="inlinecode"><span class="id" title="tactic">apply</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> и превратить цель в <span class="inlinecode"><span class="id" title="var">A</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Goal</span> ¬<span class="id" title="var">Even</span> 2 → 2 + 2 = 5.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="var">exfalso</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">exists</span> 1; <span class="id" title="tactic">trivial</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

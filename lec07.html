@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="coqdoc.css" rel="stylesheet" type="text/css" />
-<title>lec07</title>
+<title>maximum</title>
 </head>
 
 <body>
@@ -19,12 +19,10 @@
 <div class="code">
 
 <br/>
-
-<br/>
 </div>
 
 <div class="doc">
-<a name="lab1"></a><h1 class="section">Лекция 7. Индукция с несколькими базами. Определение и упрощение рекурсивных функций. Дополнительные тактики</h1>
+<a name="lab1"></a><h1 class="section">Верификация поиска максимума в массиве</h1>
 
 </div>
 <div class="code">
@@ -36,483 +34,484 @@
 <span class="id" title="keyword">Import</span> <span class="id" title="var">Nat</span> <span class="id" title="var">Peano</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-<a name="lab2"></a><h2 class="section">Индукция с несколькими базами</h2>
-
-<div class="paragraph"> </div>
-
- Иногда в доказательстве по индукции нужно рассмотреть несколько баз
-и начать шаг индукции не с нуля, а с положительного числа. Например,
-можно доказать, что любую сумму, начиная с 4 пенсов, можно разменять
-монетами по 2 и 5 пенсов. Утверждение
-
-<div class="paragraph"> </div>
+<span class="id" title="keyword">Hint Resolve</span> <span class="id" title="var">ltb_spec0</span> <span class="id" title="var">leb_spec0</span> <span class="id" title="var">eqb_spec</span> : <span class="id" title="var">bdestruct</span>.<br/>
 
 <br/>
-<span class="inlinecode"><span class="id" title="keyword">∀</span> <span class="id" title="var">p</span>, 4 ≤ <span class="id" title="var">p</span> → <span class="id" title="tactic">exists</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">p</span> = 2 * <span class="id" title="var">m</span> + 5 * <span class="id" title="var">n</span>.
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-можно доказать индукцией с базами для <span class="inlinecode"><span class="id" title="var">p</span></span> от <span class="inlinecode">0</span> до <span class="inlinecode">8</span> и шагом для <span class="inlinecode">9</span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">p</span></span>. 
-</div>
-<div class="code">
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">bdestr</span> <span class="id" title="var">X</span> <span class="id" title="var">H</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">e</span> := <span class="id" title="tactic">fresh</span> "e" <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">evar</span> (<span class="id" title="var">e</span> : <span class="id" title="keyword">Prop</span>);<br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> (<span class="id" title="var">H</span> : <span class="id" title="var">reflect</span> <span class="id" title="var">e</span> <span class="id" title="var">X</span>); <span class="id" title="tactic">subst</span> <span class="id" title="var">e</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">eauto</span> <span class="id" title="keyword">with</span> <span class="id" title="var">bdestruct</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ | <span class="id" title="tactic">try</span> <span class="id" title="tactic">first</span> [<span class="id" title="tactic">apply</span> <span class="id" title="var">nlt_ge</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> | <span class="id" title="tactic">apply</span> <span class="id" title="var">nle_gt</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>]]].<br/>
 
 <br/>
-<span class="id" title="keyword">Section</span> <span class="id" title="keyword">Induction</span>.<br/>
+<span class="id" title="keyword">Tactic Notation</span> "bdestruct" <span class="id" title="keyword">constr</span>(<span class="id" title="var">X</span>) := <span class="id" title="keyword">let</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">fresh</span> <span class="id" title="tactic">in</span> <span class="id" title="var">bdestr</span> <span class="id" title="var">X</span> <span class="id" title="var">H</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Variable</span> <span class="id" title="var">P</span> : <span class="id" title="var">nat</span> → <span class="id" title="keyword">Prop</span>.<br/>
+<span class="id" title="keyword">Tactic Notation</span> "bdestruct" <span class="id" title="keyword">constr</span>(<span class="id" title="var">X</span>) "as" <span class="id" title="var">ident</span>(<span class="id" title="var">H</span>) := <span class="id" title="var">bdestr</span> <span class="id" title="var">X</span> <span class="id" title="var">H</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">ArrayMax</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Предположим, нужно доказать <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>.  Доказательство проходит
-по индукции, но предположим, что шаг индукции <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> можно
-доказать только для <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span>. В этом случае нужно отдельно доказать две
-базы: <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">0</span> и <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">1</span>. 
+Функция <span class="inlinecode"><span class="id" title="var">array</span></span> ниже моделирует массив. <span class="inlinecode"><span class="id" title="var">array</span></span> <span class="inlinecode"><span class="id" title="var">i</span></span> есть <span class="inlinecode"><span class="id" title="var">i</span></span>-й
+элемент. Подразумевается, что индексы не превосходят некоторый
+параметр <span class="inlinecode"><span class="id" title="var">n</span></span>. Таким образом, <span class="inlinecode"><span class="id" title="var">n</span></span> есть длина массива + 1. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">step</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, 0 &lt; <span class="id" title="var">n</span> → <span class="id" title="var">P</span> <span class="id" title="var">n</span> → <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>).<br/>
-<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">base0</span> : <span class="id" title="var">P</span> 0.<br/>
-<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">base1</span> : <span class="id" title="var">P</span> 1.<br/>
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">array</span> : <span class="id" title="var">nat</span> → <span class="id" title="var">nat</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">arrayMax</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> возвращает <span class="inlinecode"><span class="id" title="var">max</span>(<span class="id" title="var">array</span></span> <span class="inlinecode">0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">array</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. Массив
+непустой для любого n &gt;= 0, поэтому максимум определен. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">arrayMax</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ <span class="id" title="var">array</span> 0<br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="var">max</span> (<span class="id" title="var">arrayMax</span> <span class="id" title="var">k</span>) (<span class="id" title="var">array</span> <span class="id" title="var">n</span>)<br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Идентификаторы <span class="inlinecode"><span class="id" title="var">Init.Nat.max</span></span> и т.п., появляющиеся в доказательстве,
+обозначают то же, что и <span class="inlinecode"><span class="id" title="var">max</span></span> 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">arrayMaxSpec1</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> <span class="id" title="var">i</span>, <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> → <span class="id" title="var">array</span> <span class="id" title="var">i</span> ≤ <span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>]; <span class="id" title="tactic">intros</span> <span class="id" title="var">i</span> <span class="id" title="var">H</span>.<br/>
+* <span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> : <span class="id" title="var">i</span> = 0) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+</div>
+
+<div class="doc">
+Тактика <span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span> доказывает не только <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">M</span></span>,
+   но и <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">M</span></span>. 
+</div>
+<div class="code">
+* <span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> : <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∨ <span class="id" title="var">i</span> = <span class="id" title="var">S</span> <span class="id" title="var">n</span>) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>.<br/>
+</div>
+
+<div class="doc">
+Эта посылка больше не нужна. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>.<br/>
+</div>
+
+<div class="doc">
+Упрощение <span class="inlinecode"><span class="id" title="var">arrayMax</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> по определению. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">H1</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H1</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> (<span class="id" title="var">le_trans</span> <span class="id" title="var">_</span> (<span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">auto</span>.<br/>
+</div>
+
+<div class="doc">
+Следует непосредственно из предположения индукции. 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="var">le_max_l</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span> <span class="id" title="var">i</span>.<br/>
+</div>
+
+<div class="doc">
+Или <span class="inlinecode"><span class="id" title="tactic">rewrite</span></span> <span class="inlinecode"><span class="id" title="var">H1</span></span>. 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">le_max_r</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Тактика <span class="inlinecode"><span class="id" title="tactic">subst</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> ищет посылку вида <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">M</span></span> или <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">x</span></span> и заменяет
+<span class="inlinecode"><span class="id" title="var">x</span></span> на <span class="inlinecode"><span class="id" title="var">M</span></span> во всей цели. 
+<div class="paragraph"> </div>
+
+ Функция <span class="inlinecode"><span class="id" title="var">arrayMax</span></span> вместо конструкции <span class="inlinecode"><span class="id" title="keyword">if</span></span> использует <span class="inlinecode"><span class="id" title="var">max</span></span>, и
+доказательство использует свойства <span class="inlinecode"><span class="id" title="var">max</span></span> из библиотеки. Определим
+аналогичную функцию с помощью <span class="inlinecode"><span class="id" title="keyword">if</span></span> и используем рефлексию в
+доказательстве. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">arrayMax'</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ <span class="id" title="var">array</span> 0<br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="keyword">let</span> <span class="id" title="var">p</span> := <span class="id" title="var">arrayMax'</span> <span class="id" title="var">k</span> <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">if</span> <span class="id" title="var">p</span> &lt;=? <span class="id" title="var">array</span> <span class="id" title="var">n</span> <span class="id" title="keyword">then</span> <span class="id" title="var">array</span> <span class="id" title="var">n</span> <span class="id" title="keyword">else</span> <span class="id" title="var">p</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">arrayMaxSpec1'</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> <span class="id" title="var">i</span>, <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> → <span class="id" title="var">array</span> <span class="id" title="var">i</span> ≤ <span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>]; <span class="id" title="tactic">intros</span> <span class="id" title="var">i</span> <span class="id" title="var">H</span>.<br/>
+* <span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> : <span class="id" title="var">i</span> = 0) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H1</span>.<br/>
+* <span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> : <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∨ <span class="id" title="var">i</span> = <span class="id" title="var">S</span> <span class="id" title="var">n</span>) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H1</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H1</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> (<span class="id" title="var">le_trans</span> <span class="id" title="var">_</span> (<span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="var">bdestruct</span> (<span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span> &lt;=? <span class="id" title="var">array</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span> <span class="id" title="var">i</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">bdestruct</span> (<span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span> &lt;=? <span class="id" title="var">array</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="var">easy</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <span class="id" title="var">lt_le_incl</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Докажем вторую часть спецификации, которая говорит, что
+<span class="inlinecode"><span class="id" title="var">arrayMax</span></span> берет результат из массива. 
+<div class="paragraph"> </div>
+
+ Нам понадобится лемма. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">max_variants</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">max</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> = <span class="id" title="var">m</span> ∨ <span class="id" title="var">max</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> = <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">max_spec</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>) <span class="id" title="keyword">as</span> [[<span class="id" title="var">_</span> <span class="id" title="var">H</span>] | [<span class="id" title="var">_</span> <span class="id" title="var">H</span>]]; [<span class="id" title="tactic">right</span> | <span class="id" title="tactic">left</span>]; <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">arrayMaxSpec2</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="tactic">∃</span> <span class="id" title="var">i</span>, <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∧ <span class="id" title="var">array</span> <span class="id" title="var">i</span> = <span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
-* <span class="id" title="tactic">assumption</span>.<br/>
-
-<br/>
+* <span class="id" title="tactic">∃</span> 0. <span class="id" title="tactic">split</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">destruct</span> <span class="id" title="var">IH</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">i</span> [<span class="id" title="var">IH1</span> <span class="id" title="var">IH2</span>]].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span> <span class="id" title="var">arrayMax</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">max_variants</span> (<span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>) (<span class="id" title="var">array</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>))) <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>].<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">∃</span> <span class="id" title="var">i</span>. <span class="id" title="tactic">split</span>; [<span class="id" title="tactic">auto</span> |].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">congruence</span>.<br/>
 </div>
 
 <div class="doc">
-Во второй подцели нужно доказать <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> из <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>. Применение <span class="inlinecode"><span class="id" title="var">step</span></span>
-ничего не даст из-за посылки <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span>, которую мы не можем доказать.
-Здесь можно применить индукцию еще раз. Базой новой индукции будет <span class="inlinecode"><span class="id" title="var">P</span></span>
-<span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">0)</span>, то есть <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">1</span>, предположением индукции — <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>, а
-доказать нужно <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span>. Последнее утверждение следует
-непосредственно из <span class="inlinecode"><span class="id" title="var">step</span></span>. 
+Тактика <span class="inlinecode"><span class="id" title="tactic">congruence</span></span> доказывает равенство из других равенств.
+        Альтернативно: rewrite H; assumption. 
 </div>
 <div class="code">
-
-<br/>
-* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH1</span>].<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">step</span>. { <span class="id" title="tactic">apply</span> <span class="id" title="var">lt_0_succ</span>. } { <span class="id" title="tactic">assumption</span>. }<br/>
-<br/>
-</div>
-
-<div class="doc">
-Фигурные скобки, как и <span class="inlinecode">*</span>, <span class="inlinecode">+</span> и т.п. показывают, что доказываются
-две разных подцели. Они не обязательны, но желательны. 
-</div>
-<div class="code">
-<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">∃</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>). <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">split</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-На самом деле, предположение одной из двух индукции (<span class="inlinecode"><span class="id" title="var">IH</span></span> или <span class="inlinecode"><span class="id" title="var">IH1</span></span>)
-обычно не нужно. Можно рассмотреть частный случай аксиомы индукции,
-где шаг индукции не использует предположение.
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="var">P</span> 0 → (<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) → <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>. (1)
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-Посылка <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> — это более сильное утверждение, чем
-обычный шаг индукции <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. Следовательно,
-формула (1) есть более слабое утверждение, чем обычная аксиома
-индукции
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="var">P</span> 0 → (<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span> → <span class="id" title="var">P</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) → <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-Формула (1) говорит, что все числа имеют вид либо <span class="inlinecode">0</span>, либо <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> для
-некоторого <span class="inlinecode"><span class="id" title="var">n</span></span>, поэтому для доказательства <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> нужно
-рассмотреть оба этих случая.
-
-<div class="paragraph"> </div>
-
-Это утверждение удобно применять тактикой <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>. На цели <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>
-эта тактика производит две подцели: <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">0</span> и <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. Как и в случае
-с <span class="inlinecode"><span class="id" title="tactic">induction</span></span>, можно задать имя новой переменной во второй подцели:
-<span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[|</span> <span class="inlinecode"><span class="id" title="var">n</span>]</span>.
-
-<div class="paragraph"> </div>
-
-Докажем <span class="inlinecode"><span class="id" title="var">P_holds</span></span> еще раз, используя <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> вместо первой индукции. 
+Версия, использующая <span class="inlinecode"><span class="id" title="var">arrayMax'</span></span> вместо <span class="inlinecode"><span class="id" title="var">arrayMax</span></span>. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds'</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">arrayMaxSpec2'</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="tactic">∃</span> <span class="id" title="var">i</span>, <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∧ <span class="id" title="var">array</span> <span class="id" title="var">i</span> = <span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
-<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
-* <span class="id" title="tactic">assumption</span>.<br/>
-* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">step</span>; [ <span class="id" title="tactic">apply</span> <span class="id" title="var">lt_0_succ</span> | <span class="id" title="tactic">assumption</span>].<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+* <span class="id" title="tactic">∃</span> 0. <span class="id" title="tactic">split</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">destruct</span> <span class="id" title="var">IH</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">i</span> [<span class="id" title="var">IH1</span> <span class="id" title="var">IH2</span>]].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span> <span class="id" title="var">arrayMax'</span>. <span class="id" title="var">bdestruct</span> (<span class="id" title="var">arrayMax'</span> <span class="id" title="var">n</span> &lt;=? <span class="id" title="var">array</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">∃</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>). <span class="id" title="tactic">split</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">∃</span> <span class="id" title="var">i</span>. <span class="id" title="tactic">split</span>; <span class="id" title="tactic">auto</span>.<br/>
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Можно было бы также использовать <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> вместо второй индукции.
-
-<div class="paragraph"> </div>
-
-Альтернативно можно доказать дизъюнкцию вида <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode">0</span> <span class="inlinecode">∨</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span> в шаге индукции
-и рассмотреть разные случаи. 
+Еще одна реализация <span class="inlinecode"><span class="id" title="var">arrayMax</span></span>, на этот раз с хвостовой рекурсией. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">P_holds''</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">P</span> <span class="id" title="var">n</span>.<br/>
-<span class="id" title="keyword">Proof</span>.<br/>
-<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>]; [<span class="id" title="tactic">assumption</span> |].<br/>
-<span class="id" title="tactic">assert</span> (<span class="id" title="var">H</span> : <span class="id" title="var">n</span> = 0 ∨ 0 &lt; <span class="id" title="var">n</span>) <span class="id" title="tactic">by</span> <span class="id" title="var">lia</span>.<br/>
-<span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>].<br/>
-+ <span class="id" title="tactic">subst</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">assumption</span>.<br/>
-+ <span class="id" title="tactic">auto</span>.<br/>
-</div>
-
-<div class="doc">
-Тактика <span class="inlinecode"><span class="id" title="tactic">auto</span></span> многократно применяет правило Modus Ponens. 
-</div>
-<div class="code">
-<span class="id" title="keyword">Qed</span>.<br/>
-
-<br/>
-<span class="id" title="keyword">End</span> <span class="id" title="keyword">Induction</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-<a name="lab3"></a><h2 class="section">Определение и упрощение рекурсивных функций</h2>
-
-
-<div class="paragraph"> </div>
-
-В Coq можно определить только функции, которые заведомо
-останавливаются на любых аргументах. Это свойство необходимо для
-корректности логики и разрешимости проверки типов. Оно гарантируется
-тем, что аргумент рекурсивного вызова доложен быть переменной, которая
-является непосредственным подтермом исходного аргумента. Например,
-если исходный аргумент <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется в конструкции <span class="inlinecode"><span class="id" title="keyword">match</span></span> с
-термом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>, то аргументом рекурсивного вызова может быть только <span class="inlinecode"><span class="id" title="var">m</span></span>.
-
-<div class="paragraph"> </div>
-
-Это, конечно, сильно ограничивает способы реализации алгоритмов. (На
-самом деле из-за выразительной системы типов в Coq это ограничение
-можно обойти и определить любую рекурсию, если заведомо известно, что
-она завершается.) 
-<div class="paragraph"> </div>
-
- Рассмотрим следующую функцию. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">f</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">arrayMaxHelp</span> (<span class="id" title="var">n</span> <span class="id" title="var">m</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
 <span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
-| 0 ⇒ 6<br/>
-| 1 ⇒ 0<br/>
-| <span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">p</span> <span class="id" title="keyword">as</span> <span class="id" title="var">k</span>) ⇒ <span class="id" title="var">f</span> <span class="id" title="var">k</span> + 2<br/>
+| 0 ⇒ <span class="id" title="var">max</span> (<span class="id" title="var">array</span> 0) <span class="id" title="var">m</span><br/>
+| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="var">arrayMaxHelp</span> <span class="id" title="var">k</span> (<span class="id" title="var">max</span> (<span class="id" title="var">array</span> <span class="id" title="var">n</span>) <span class="id" title="var">m</span>)<br/>
 <span class="id" title="keyword">end</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Вместо <span class="inlinecode"><span class="id" title="var">p</span></span> можно написать _, который подчеркивает тот факт, что эта
-переменная не используется в правой части.
-
-<div class="paragraph"> </div>
-
-Образец <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode"><span class="id" title="var">k</span>)</span> означает, что <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>
-(в частности, <span class="inlinecode">2</span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>) и подтерму <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> (то есть <span class="inlinecode"><span class="id" title="var">n</span>-1</span>)
-одновременно дается имя <span class="inlinecode"><span class="id" title="var">k</span></span>. Строчка <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span> <span class="inlinecode">⇒</span> <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span> в
-<span class="inlinecode"><span class="id" title="keyword">match</span></span> не проходит, несмотря на то, что <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> есть подтерм <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>,
-так как аргументом рекурсивного вызова должна быть переменная.
-
-<div class="paragraph"> </div>
-
-Вот другой вариант определения <span class="inlinecode"><span class="id" title="var">f</span></span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">f'</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
-<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
-| 0 ⇒ 6<br/>
-| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="keyword">match</span> <span class="id" title="var">k</span> <span class="id" title="keyword">with</span><br/>
-&nbsp;&nbsp;| 0 ⇒ 0<br/>
-&nbsp;&nbsp;| <span class="id" title="var">S</span> <span class="id" title="var">p</span> ⇒ <span class="id" title="var">f'</span> <span class="id" title="var">k</span> + 2<br/>
-&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
-<span class="id" title="keyword">end</span>.<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">arrayMaxTail</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> := <span class="id" title="var">arrayMaxHelp</span> <span class="id" title="var">n</span> (<span class="id" title="var">array</span> <span class="id" title="var">n</span>).<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Рассмотрим вычисление НОД с помощью алгоритма Евклида. 
+Докажем равенство <span class="inlinecode"><span class="id" title="var">arrayMax</span></span> и <span class="inlinecode"><span class="id" title="var">arrayMaxTail</span></span>. Сначала докажем
+более общее утверждение про <span class="inlinecode"><span class="id" title="var">arrayMax</span></span> и <span class="inlinecode"><span class="id" title="var">arrayMaxHelp</span></span>. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">gcd</span> (<span class="id" title="var">a</span> <span class="id" title="var">b</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
-<span class="id" title="keyword">match</span> <span class="id" title="var">b</span> <span class="id" title="keyword">with</span><br/>
-| 0 ⇒ <span class="id" title="var">a</span> <br/>
-| <span class="id" title="var">S</span> <span class="id" title="var">k</span> ⇒ <span class="id" title="var">gcd</span> <span class="id" title="var">b</span> (<span class="id" title="var">a</span> <span class="id" title="var">mod</span> <span class="id" title="var">S</span> <span class="id" title="var">k</span>) <br/>
-<span class="id" title="keyword">end</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Нотация <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> означает <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span>. Рекурсия идет по второму аргументу,
-и на первый взгляд <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">k</span>)</span> не является подтермом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span>. Действительно,
-это определение не принималось в прежних версиях Coq, но с учетом равенства
-по определению функцию <span class="inlinecode"><span class="id" title="var">modulo</span></span> удалось определить так, что сейчас ограничение
-на аргумент рекурсивного вызова выполняется. 
-<div class="paragraph"> </div>
-
- В качестве конкретного примера доказательства по индукции
-рассмотрим следующее утверждение. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Print</span> <span class="id" title="var">Even</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-<span class="inlinecode"><span class="id" title="var">Even</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">⇒</span> <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode">2</span> <span class="inlinecode">*</span> <span class="inlinecode"><span class="id" title="var">m</span></span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">f_even</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">Even</span> (<span class="id" title="var">f</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">maxHelpEqual</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> <span class="id" title="var">m</span>, <span class="id" title="var">max</span> (<span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>) <span class="id" title="var">m</span> = <span class="id" title="var">arrayMaxHelp</span> <span class="id" title="var">n</span> <span class="id" title="var">m</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
-<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
-* <span class="id" title="tactic">unfold</span> <span class="id" title="var">Even</span>. <span class="id" title="tactic">simpl</span> <span class="id" title="var">f</span>. &nbsp;&nbsp;<span class="id" title="tactic">exists</span> 3. <span class="id" title="tactic">trivial</span>.<br/>
-* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span> <span class="id" title="var">f</span>. <span class="id" title="tactic">exists</span> 0; <span class="id" title="tactic">trivial</span>.<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>]; <span class="id" title="tactic">intro</span> <span class="id" title="var">m</span>; [<span class="id" title="tactic">reflexivity</span> |].<br/>
+<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">IH</span>, <span class="id" title="var">max_assoc</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-После этой тактики терм <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> преобразовался не в желаемый
-<span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>, а в непонятный на первый взгляд терм
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
-| 0 ⇒ 0<br/>
-| <span class="id" title="var">S</span> <span class="id" title="var">_</span> ⇒ <span class="id" title="var">f</span> <span class="id" title="var">n</span> + 2<br/>
-<span class="id" title="keyword">end</span> + 2.
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-Это произошло, потому что упрощение <span class="inlinecode"><span class="id" title="var">f</span></span> было сделано два раза. Сначала
-действительно <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> преобразовался в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>, но затем
-Coq попытался упростить <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> еще раз. Поскольку <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> точно
-отличен от <span class="inlinecode">0</span>, первый вариант в определении <span class="inlinecode"><span class="id" title="var">f</span></span> не применяется. Зато
-<span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> может сопоставляться как с <span class="inlinecode">1</span>, то есть с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">0</span>, так и с <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span>
-<span class="inlinecode"><span class="id" title="var">p</span>)</span>. При этом <span class="inlinecode"><span class="id" title="var">n</span></span> будет равно <span class="inlinecode">0</span> или <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span>, соответственно. Поэтому
-<span class="inlinecode"><span class="id" title="keyword">match</span></span> с этими двумя вариантами остается.
-
-<div class="paragraph"> </div>
-
-Отменим доказательство. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Abort</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Чтобы предотвратить развертывание <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>, можно поступить двумя
-способами. Следующая команда запрещает упрощать <span class="inlinecode"><span class="id" title="var">f</span></span>, если при этом
-на верхний уровень выходит <span class="inlinecode"><span class="id" title="keyword">match</span></span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="var">Arguments</span> <span class="id" title="var">f</span> <span class="id" title="var">n</span> : <span class="id" title="tactic">simpl</span> <span class="id" title="var">nomatch</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Здесь <span class="inlinecode"><span class="id" title="var">n</span></span> — тот идентификатор, который на самом деле использовался
-как аргумент <span class="inlinecode"><span class="id" title="var">f</span></span> в определении. 
-<div class="paragraph"> </div>
-
- Следующее утверждение неверно и используется только для тестирования. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = 0.<br/>
-<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">simpl</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Переписывает <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Abort</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Второй способ состоит в определении леммы. В этом случае упрощение
-происходит переписыванием с использование пропозиционального
-равенства, а не равенства по определению, как в <span class="inlinecode"><span class="id" title="tactic">simpl</span></span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Lemma</span> <span class="id" title="var">f_simpl</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = <span class="id" title="var">f</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) + 2.<br/>
-<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
-
-<br/>
-<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">f</span> (<span class="id" title="var">S</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)) = 0.<br/>
-<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">f_simpl</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Переписывает <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>))</span> в <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span>. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Abort</span>.<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Повторяем попытку доказать f_even. 
-</div>
-<div class="code">
-
-<br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">f_even</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">Even</span> (<span class="id" title="var">f</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">maxEqual</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span> = <span class="id" title="var">arrayMaxTail</span> <span class="id" title="var">n</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
-<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>].<br/>
-* <span class="id" title="tactic">exists</span> 3; <span class="id" title="tactic">trivial</span>.<br/>
-* <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">exists</span> 0; <span class="id" title="tactic">trivial</span>.<br/>
-&nbsp;&nbsp;+ <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">IH</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">m</span> <span class="id" title="var">IH</span>]. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">IH</span>. <span class="id" title="tactic">exists</span> (<span class="id" title="var">m</span> + 1). <span class="id" title="tactic">ring</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">unfold</span> <span class="id" title="var">arrayMaxTail</span>. <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">maxHelpEqual</span>.<br/>
+<span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span>]; <span class="id" title="tactic">simpl</span>.<br/>
+* <span class="id" title="tactic">rewrite</span> <span class="id" title="var">max_id</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">max_assoc</span>, <span class="id" title="var">max_id</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab4"></a><h2 class="section">Дополнительные тактики</h2>
+<a name="lab2"></a><h2 class="section">Конструктивная версия <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span></h2>
+
 
 <div class="paragraph"> </div>
 
-<a name="lab5"></a><h3 class="section">Доказательство целей с ложной посылкой</h3>
+См. упражнение 3 в конце лекции 5.
 
 <div class="paragraph"> </div>
 
- Если посылка <span class="inlinecode"><span class="id" title="var">H</span></span> представляет собой равенство двух термов, которые
-начинаются с разных конструкторов, например, <span class="inlinecode">0</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">0</span> или <span class="inlinecode"><span class="id" title="var">true</span></span> <span class="inlinecode">=</span>
-<span class="inlinecode"><span class="id" title="var">false</span></span>, то можно воспользоваться тактиками <span class="inlinecode"><span class="id" title="tactic">discriminate</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> или
-<span class="inlinecode"><span class="id" title="var">simplify_eq</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span>. 
+Если <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=</span> <span class="inlinecode">{1,</span> <span class="inlinecode">2,</span> <span class="inlinecode">...}</span>, а <span class="inlinecode"><span class="id" title="var">Bi</span></span> — множество для каждого <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, то
+элементами зависимой суммы <span class="inlinecode"><span class="id" title="var">B1</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B2</span></span> <span class="inlinecode">+</span> <span class="inlinecode">...</span> являются пары <span class="inlinecode">(<span class="id" title="var">i</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span>, где
+<span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">Bi</span></span>. В теории типов аналогом зависимой суммы множеств
+является тип <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, где <span class="inlinecode"><span class="id" title="var">x</span></span> может входить свободно в <span class="inlinecode"><span class="id" title="var">B</span></span>.
+Термами этого типа являются пары <span class="inlinecode">(<span class="id" title="var">a</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span>, где <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span>. Если
+<span class="inlinecode"><span class="id" title="var">B</span></span> есть формула, зависящая от <span class="inlinecode"><span class="id" title="var">x</span></span>, то согласно соответствию Карри-Говарда
+пару <span class="inlinecode">(<span class="id" title="var">a</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span> можно рассматривать как доказательство <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>: <span class="inlinecode"><span class="id" title="var">a</span></span> есть
+свидетель утверждения о существовании и <span class="inlinecode"><span class="id" title="var">b</span></span> есть доказательство, что
+<span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span> действительно имеет место.
+
+<div class="paragraph"> </div>
+
+С учетом того, что элементами зависимого произведения <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>
+являются функции, которые <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в терм типа <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span> (см.
+лекцию 5), термы типа <span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode">∃<span class="id" title="var">y</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> — это функции, которые любой
+терм <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в пару <span class="inlinecode">(<span class="id" title="var">b</span>,</span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>, где <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span></span> и <span class="inlinecode"><span class="id" title="var">p</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">P</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>/<span class="id" title="var">y</span>]</span>.
+Таким образом, 
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="tactic">∃</span> <span class="id" title="var">i</span>, <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∧ <span class="id" title="var">array</span> <span class="id" title="var">i</span> = <span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+можно рассматривать как тип функций, которые принимает максимальный
+индекс массива и возвращают индекс, где находится максимум.
+Доказательство <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span> этого утверждения является программой,
+вычисляющей эту функцию. Ее можно запустить в Coq и вычислить значение
+на любом аргументе.
+
+<div class="paragraph"> </div>
+
+На самом деле в Coq есть две версии квантора существования:
+<span class="inlinecode"><span class="id" title="tactic">∃</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> предназначен только для доказательств, а <span class="inlinecode">{<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">B</span>}</span>
+может использоваться для вычислений, как описано выше. Формулировка
+<span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span> использует первую версию, поэтому, чтобы иметь
+возможность запускать доказательство как программу, нужно доказать
+конструктивный аналог <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span>. 
+<div class="paragraph"> </div>
+
+ Это доказательство отличается от предыдущих лишь использованием
+теоремы <span class="inlinecode"><span class="id" title="var">max_dec</span></span>, аналогичной лемме <span class="inlinecode"><span class="id" title="var">max_variants</span></span> выше. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Goal</span> <span class="id" title="var">true</span> = <span class="id" title="var">false</span> → 2 + 2 = 5.<br/>
-<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">discriminate</span> <span class="id" title="var">H</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">arrayMaxSpec2_constr</span> :<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, {<span class="id" title="var">i</span> | <span class="id" title="var">i</span> ≤ <span class="id" title="var">n</span> ∧ <span class="id" title="var">array</span> <span class="id" title="var">i</span> = <span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>}.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">IH</span>].<br/>
+* <span class="id" title="tactic">∃</span> 0. <span class="id" title="tactic">split</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
+* <span class="id" title="tactic">destruct</span> <span class="id" title="var">IH</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">i</span> [<span class="id" title="var">IH1</span> <span class="id" title="var">IH2</span>]].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span> <span class="id" title="var">arrayMax</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> (<span class="id" title="var">max_dec</span> (<span class="id" title="var">arrayMax</span> <span class="id" title="var">n</span>) (<span class="id" title="var">array</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>))) <span class="id" title="keyword">as</span> [<span class="id" title="var">H</span> | <span class="id" title="var">H</span>];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[<span class="id" title="tactic">∃</span> <span class="id" title="var">i</span> | <span class="id" title="tactic">∃</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>)]; (<span class="id" title="tactic">split</span>; [<span class="id" title="tactic">auto</span> | <span class="id" title="tactic">congruence</span>]).<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Если посылка есть ложное бескванторное арифметическое равенство или
-неравенство, то цель доказывается тактикой <span class="inlinecode"><span class="id" title="var">lia</span></span>. 
+Конструктивные теоремы должны заканчиваться с помощью <span class="inlinecode"><span class="id" title="keyword">Defined</span></span>,
+а не <span class="inlinecode"><span class="id" title="keyword">Qed</span></span>. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span>, <span class="id" title="var">x</span> + 1 &lt; <span class="id" title="var">x</span> → 2 + 2 = 5.<br/>
-<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">H</span>. <span class="id" title="var">lia</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">ArrayMax</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Если посылка имеет вид <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode">¬<span class="id" title="var">A</span></span>, где <span class="inlinecode"><span class="id" title="var">A</span></span> истинно, то тактика <span class="inlinecode"><span class="id" title="var">contradict</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span>
-заменяет даную цель на <span class="inlinecode"><span class="id" title="var">A</span></span>. 
+<a name="lab3"></a><h2 class="section">Тестирование функции <span class="inlinecode"><span class="id" title="var">arrayMax</span></span></h2>
+
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Goal</span> ¬<span class="id" title="var">Even</span> 2 → 2 + 2 = 5.<br/>
-<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="var">contradict</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">exists</span> 1; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Check</span> <span class="id" title="var">arrayMax</span>.<br/>
+<span class="id" title="keyword">Check</span> <span class="id" title="var">arrayMaxSpec1</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Section</span> <span class="id" title="var">ArrayTest</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Можно также воспользоваться тактикой <span class="inlinecode"><span class="id" title="var">exfalso</span></span>, которая заменяет
-текущую цель на <span class="inlinecode"><span class="id" title="var">False</span></span>. Если вспомнить, что <span class="inlinecode">¬<span class="id" title="var">A</span></span> есть сокращение для <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span>
-<span class="inlinecode"><span class="id" title="var">False</span></span>, то далее можно использовать <span class="inlinecode"><span class="id" title="tactic">apply</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> и превратить цель в <span class="inlinecode"><span class="id" title="var">A</span></span>. 
+Заведём переменную, про которую больше ничего не известно.
+Она будет выполнять роль неопределенного значения. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Goal</span> ¬<span class="id" title="var">Even</span> 2 → 2 + 2 = 5.<br/>
-<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>. <span class="id" title="var">exfalso</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">exists</span> 1; <span class="id" title="tactic">trivial</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Variable</span> <span class="id" title="var">undef</span> : <span class="id" title="var">nat</span>.<br/>
 
 <br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">array</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> :=<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="var">n</span> <span class="id" title="keyword">with</span><br/>
+| 0 ⇒ 4<br/>
+| 1 ⇒ 2<br/>
+| 2 ⇒ 7<br/>
+| 3 ⇒ 2<br/>
+| 4 ⇒ 0<br/>
+| <span class="id" title="var">_</span> ⇒ <span class="id" title="var">undef</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+max index 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">mi</span> := 4.<br/>
+
+<br/>
+<span class="id" title="keyword">Compute</span> <span class="id" title="var">arrayMax</span> <span class="id" title="var">array</span> <span class="id" title="var">mi</span>.<br/>
+<span class="id" title="keyword">Compute</span> <span class="id" title="var">arrayMax'</span> <span class="id" title="var">array</span> <span class="id" title="var">mi</span>.<br/>
+<span class="id" title="keyword">Compute</span> <span class="id" title="var">arrayMaxTail</span> <span class="id" title="var">array</span> <span class="id" title="var">mi</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Проверим работу <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2_constr</span></span> как функции, которая возвращает
+индекс, где находится максимум. Библиотечная функция <span class="inlinecode"><span class="id" title="var">proj1_sig</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> возвращает
+первую компоненту пары <span class="inlinecode"><span class="id" title="var">p</span></span> типа <span class="inlinecode">{<span class="id" title="var">i</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">|</span> <span class="inlinecode">...}</span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Compute</span> <span class="id" title="var">proj1_sig</span> (<span class="id" title="var">arrayMaxSpec2_constr</span> <span class="id" title="var">array</span> <span class="id" title="var">mi</span>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Возвращает <span class="inlinecode">2</span>, так как <span class="inlinecode"><span class="id" title="var">array</span></span> <span class="inlinecode">2</span> <span class="inlinecode">=</span> <span class="inlinecode">7</span>.
+
+<div class="paragraph"> </div>
+
+В случае функции <span class="inlinecode"><span class="id" title="var">arrayMax</span></span> мы сначала написали функцию, а потом
+доказали, что она соответствует своей спецификации. Использование
+конструктивных доказательств, таких как <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2_constr</span></span>, в
+качестве программ согласно соответствию Карри-Говарда является еще
+одним способом получить верифицированную программу. Такая программа
+является правильной по построению. Таким образом, вместо написания
+программы можно составить конструктивное доказательство существования
+необходимого объекта. При этом программирование и доказательство
+теорем сливаются в одно. В некотором точном смысле конструктивное
+доказательство — это программа, которая переделывает свидетельство
+того, что дано, в свидетельство того, что нужно доказать.
+
+<div class="paragraph"> </div>
+
+Нормализация в Coq терма-доказательства утверждения о существовании
+какого-то объекта является не очень эффективным способом построения
+этого объекта, потому что значительная часть терма посвящена
+доказательству того, что объект обладает нужным свойством. Это
+доказательство затем отбрасывается. Coq умеет преобразовывать
+доказательства в программы на языках функционального программирования
+OCaml, Haskell и Scheme. При этом неконструктивные части
+доказательства удаляются. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">ArrayTest</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Извлечем программу на Scheme из доказательства <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2_constr</span></span>. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Extraction</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Extraction</span> <span class="id" title="var">Language</span> <span class="id" title="keyword">Scheme</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Extraction</span> <span class="id" title="var">arrayMaxSpec2_constr</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Извлеченный код.
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode">(<span class="id" title="var">define</span> <span class="id" title="var">arrayMaxSpec2_constr</span> (<span class="id" title="var">lambdas</span> (<span class="id" title="var">array</span> <span class="id" title="var">n</span>)<br/>
+&nbsp;&nbsp;(<span class="id" title="keyword">match</span> <span class="id" title="var">n</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" title="var">O</span>) `(<span class="id" title="var">O</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" title="var">S</span> <span class="id" title="var">n0</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">let</span> ((<span class="id" title="var">s</span> (@ <span class="id" title="var">max_dec0</span> (@ <span class="id" title="var">arrayMax</span> <span class="id" title="var">array</span> <span class="id" title="var">n0</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">array</span> `(<span class="id" title="var">S</span> ,<span class="id" title="var">n0</span>)))))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">match</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" title="var">Left</span>) (@ <span class="id" title="var">arrayMaxSpec2_constr</span> <span class="id" title="var">array</span> <span class="id" title="var">n0</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" title="var">Right</span>) `(<span class="id" title="var">S</span> ,<span class="id" title="var">n0</span>))))))))
+<div class="paragraph"> </div>
+
+</span>
+</div>
+<div class="code">
 </div>
 <hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
 </div>
