@@ -22,7 +22,7 @@
 </div>
 
 <div class="doc">
-<a name="lab1"></a><h1 class="section">Верификация поиска максимума в массиве</h1>
+<a id="lab1"></a><h1 class="section">Лекция 7. Верификация поиска максимума в массиве (все доказательства). Зависимые суммы и квантор существования. Извлечение программ из конструктивных доказательств</h1>
 
 </div>
 <div class="code">
@@ -34,7 +34,7 @@
 <span class="id" title="keyword">Import</span> <span class="id" title="var">Nat</span> <span class="id" title="var">Peano</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Hint Resolve</span> <span class="id" title="var">ltb_spec0</span> <span class="id" title="var">leb_spec0</span> <span class="id" title="var">eqb_spec</span> : <span class="id" title="var">bdestruct</span>.<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">ltb_spec0</span> <span class="id" title="var">leb_spec0</span> <span class="id" title="var">eqb_spec</span> : <span class="id" title="var">bdestruct</span>.<br/>
 
 <br/>
 <span class="id" title="keyword">Ltac</span> <span class="id" title="var">bdestr</span> <span class="id" title="var">X</span> <span class="id" title="var">H</span> :=<br/>
@@ -287,32 +287,65 @@
 </div>
 
 <div class="doc">
-<a name="lab2"></a><h2 class="section">Конструктивная версия <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span></h2>
+<a id="lab2"></a><h2 class="section">Зависимые суммы и квантор существования</h2>
 
 
 <div class="paragraph"> </div>
 
-См. упражнение 3 в конце лекции 5.
+Правило введения квантора существования в теории зависимых типов
+выгладит примерно следующим образом.
 
 <div class="paragraph"> </div>
 
-Если <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=</span> <span class="inlinecode">{1,</span> <span class="inlinecode">2,</span> <span class="inlinecode">...}</span>, а <span class="inlinecode"><span class="id" title="var">Bi</span></span> — множество для каждого <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, то
-элементами зависимой суммы <span class="inlinecode"><span class="id" title="var">B1</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B2</span></span> <span class="inlinecode">+</span> <span class="inlinecode">...</span> являются пары <span class="inlinecode">(<span class="id" title="var">i</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span>, где
-<span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">Bi</span></span>. В теории типов аналогом зависимой суммы множеств
-является тип <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, где <span class="inlinecode"><span class="id" title="var">x</span></span> может входить свободно в <span class="inlinecode"><span class="id" title="var">B</span></span>.
-Термами этого типа являются пары <span class="inlinecode">(<span class="id" title="var">a</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span>, где <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span>. Если
-<span class="inlinecode"><span class="id" title="var">B</span></span> есть формула, зависящая от <span class="inlinecode"><span class="id" title="var">x</span></span>, то согласно соответствию Карри-Говарда
-пару <span class="inlinecode">(<span class="id" title="var">a</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span> можно рассматривать как доказательство <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>: <span class="inlinecode"><span class="id" title="var">a</span></span> есть
-свидетель утверждения о существовании и <span class="inlinecode"><span class="id" title="var">b</span></span> есть доказательство, что
-<span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span> действительно имеет место.
+<br/>
+<span class="inlinecode"><span class="id" title="var">Γ</span> |- <span class="id" title="var">M</span> : <span class="id" title="var">A</span>     <span class="id" title="var">Γ</span> |- <span class="id" title="var">N</span> : <span class="id" title="var">B</span>[<span class="id" title="var">M</span>/<span class="id" title="var">x</span>]<br/>
+------------------------------<br/>
+&nbsp;&nbsp;&nbsp;<span class="id" title="var">Γ</span> |- (<span class="id" title="var">M</span>, <span class="id" title="var">N</span>) : ∃<span class="id" title="var">x</span> : <span class="id" title="var">A</span>, <span class="id" title="var">B</span>
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Как и в других правилах, если убрать термы <span class="inlinecode"><span class="id" title="var">M</span></span>, <span class="inlinecode"><span class="id" title="var">N</span></span> и <span class="inlinecode">(<span class="id" title="var">M</span>,</span> <span class="inlinecode"><span class="id" title="var">N</span>)</span>, то
+полученное правило вывода является корректным в предикатной логике.
 
 <div class="paragraph"> </div>
 
-С учетом того, что элементами зависимого произведения <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>
-являются функции, которые <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в терм типа <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>]</span> (см.
+Таким образом, с точки зрения соответствия Карри-Говарда
+доказательством утверждения <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> является пара термов <span class="inlinecode">(<span class="id" title="var">M</span>,</span> <span class="inlinecode"><span class="id" title="var">N</span>)</span>.
+Терм <span class="inlinecode"><span class="id" title="var">M</span></span> является свидетелем существования, то есть объектом,
+существование которого утверждается. Терм <span class="inlinecode"><span class="id" title="var">N</span></span> является
+доказательством, что <span class="inlinecode"><span class="id" title="var">N</span></span> действительно удовлетворяет предикату <span class="inlinecode"><span class="id" title="var">B</span></span>, то
+есть что <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">M</span>/<span class="id" title="var">x</span>]</span> имеет место.
+
+<div class="paragraph"> </div>
+
+Тип <span class="inlinecode">∃<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, элементами которого являются пары, называется
+зависимой суммой (см. упражнение 3 в конце лекции 5). Это название,
+как и в случае зависимого произведения, опирается на факт из теории
+множеств. Суммой <span class="inlinecode"><span class="id" title="var">B1</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B2</span></span>, или дизъюнктным объединением, множеств
+<span class="inlinecode"><span class="id" title="var">B1</span></span> и <span class="inlinecode"><span class="id" title="var">B2</span></span>, называется объединении непересекающихся «копий» этих
+множеств. Например, <span class="inlinecode"><span class="id" title="var">B1</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B2</span></span> можно реализовать как <span class="inlinecode">{(1,</span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">B1</span>}</span>
+<span class="inlinecode">∪</span> <span class="inlinecode">{(2,</span> <span class="inlinecode"><span class="id" title="var">y</span>)</span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">B2</span>}</span>.
+
+<div class="paragraph"> </div>
+
+Это определение обобщается на произвольные семейства множеств
+<span class="inlinecode">{<span class="id" title="var">Bi</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span>}</span>. Если <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">=</span> <span class="inlinecode">{1,</span> <span class="inlinecode">2,</span> <span class="inlinecode">...}</span>, а <span class="inlinecode"><span class="id" title="var">Bi</span></span> — множество для каждого
+<span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span>, то элементами зависимой суммы <span class="inlinecode"><span class="id" title="var">B1</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B2</span></span> <span class="inlinecode">+</span> <span class="inlinecode">...</span> являются пары
+<span class="inlinecode">(<span class="id" title="var">i</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>)</span>, где <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">Bi</span></span>. Это похоже на правило вывода
+для квантора существования, приведенное выше. 
+<div class="paragraph"> </div>
+
+<a id="lab3"></a><h2 class="section">Извлечение программ из конструктивных доказательств</h2>
+
+<div class="paragraph"> </div>
+
+ С учетом того, что элементами зависимого произведения <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>
+являются функции, которые <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в терм типа <span class="inlinecode"><span class="id" title="var">B</span>[<span class="id" title="var">M</span>/<span class="id" title="var">x</span>]</span> (см.
 лекцию 5), термы типа <span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode">∃<span class="id" title="var">y</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> — это функции, которые любой
-терм <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в пару <span class="inlinecode">(<span class="id" title="var">b</span>,</span> <span class="inlinecode"><span class="id" title="var">p</span>)</span>, где <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span></span> и <span class="inlinecode"><span class="id" title="var">p</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">P</span>[<span class="id" title="var">a</span>/<span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">b</span>/<span class="id" title="var">y</span>]</span>.
-Таким образом, 
+терм <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> отображают в пару <span class="inlinecode">(<span class="id" title="var">N</span>,</span> <span class="inlinecode"><span class="id" title="var">K</span>)</span>, где <span class="inlinecode"><span class="id" title="var">N</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">B</span></span> и <span class="inlinecode"><span class="id" title="var">K</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">P</span>[<span class="id" title="var">M</span>/<span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">N</span>/<span class="id" title="var">y</span>]</span>.
+Например,
 
 <div class="paragraph"> </div>
 
@@ -333,14 +366,14 @@
 
 На самом деле в Coq есть две версии квантора существования:
 <span class="inlinecode"><span class="id" title="tactic">∃</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> предназначен только для доказательств, а <span class="inlinecode">{<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">B</span>}</span>
-может использоваться для вычислений, как описано выше. Формулировка
+может использоваться для вычислений. Формулировка
 <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span> использует первую версию, поэтому, чтобы иметь
 возможность запускать доказательство как программу, нужно доказать
 конструктивный аналог <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2</span></span>. 
 <div class="paragraph"> </div>
 
  Это доказательство отличается от предыдущих лишь использованием
-теоремы <span class="inlinecode"><span class="id" title="var">max_dec</span></span>, аналогичной лемме <span class="inlinecode"><span class="id" title="var">max_variants</span></span> выше. 
+теоремы <span class="inlinecode"><span class="id" title="var">max_dec</span></span>, аналогичной лемме <span class="inlinecode"><span class="id" title="var">max_variants</span></span>. 
 </div>
 <div class="code">
 
@@ -372,7 +405,7 @@
 </div>
 
 <div class="doc">
-<a name="lab3"></a><h2 class="section">Тестирование функции <span class="inlinecode"><span class="id" title="var">arrayMax</span></span></h2>
+<a id="lab4"></a><h3 class="section">Тестирование определенных выше функций</h3>
 
 </div>
 <div class="code">
@@ -411,7 +444,7 @@
 </div>
 
 <div class="doc">
-max index 
+mi означает "максимальный индекс". 
 </div>
 <div class="code">
 
@@ -427,6 +460,10 @@ max index
 </div>
 
 <div class="doc">
+Все три вычисления возвращают 7 — максимальный элемент в массиве.
+
+<div class="paragraph"> </div>
+
 Проверим работу <span class="inlinecode"><span class="id" title="var">arrayMaxSpec2_constr</span></span> как функции, которая возвращает
 индекс, где находится максимум. Библиотечная функция <span class="inlinecode"><span class="id" title="var">proj1_sig</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> возвращает
 первую компоненту пары <span class="inlinecode"><span class="id" title="var">p</span></span> типа <span class="inlinecode">{<span class="id" title="var">i</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">|</span> <span class="inlinecode">...}</span>. 
