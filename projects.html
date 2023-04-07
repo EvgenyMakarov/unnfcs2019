@@ -39,11 +39,11 @@
 
 Проекты выполняются индивидуально или парами. Нужно выбрать одну из
 тем, приведенных ниже, и записать свой выбор в <a
-href="https://forms.gle/ELQhAwHFZ1giSMbB9">этой форме</a>. Над
+href="https://forms.gle/zZ6q9rBg2GJ8uEh77">этой форме</a>. Над
 каждой темой может работать не более одной команды.
 Темы распределяются в порядке поступления заявок. Прежде заполнения
 формы следует посмотреть в <a
-href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBTl-_Sf_DWc/edit?usp=sharing">таблицу</a>,
+href="https://docs.google.com/spreadsheets/d/1YillB9Q1l5A7MBPLslmyYWjRaqr2JSbeNzcpAqtPOWU/edit?usp=sharing">таблицу</a>,
 в которой записываются поданные заявки, и выбрать тему, которая еще не
 задана. Если будет подано более одной заявки с одной и той же темой,
 то приоритет будет за первой командой.
@@ -53,7 +53,7 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 После того, как вы напишете функцию и спецификацию и до начала
 доказательства пришлите спецификацию преподавателю для проверки на
 портале или по электронной почте <code>emakarov@gmail.com</code>
-(в теме письма укажите <code><span class="inlinecode">[ОКН2022]</span></code> с квадратными
+(в теме письма укажите <code><span class="inlinecode">[ОКН2023]</span></code> с квадратными
 скобками). Также присылайте все возникающие вопросы.
 
 <div class="paragraph"> </div>
@@ -90,75 +90,24 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-В программировании принято нумеровать элементы массивов с нуля. Таким
-образом, допустимые индексы в массиве длины n есть <span class="inlinecode">0</span>, <span class="inlinecode">1</span>, …, <span class="inlinecode"><span class="id" title="var">n</span>-1</span>. Если
-функция имеет дело с массивом (представленным функцией, как в
-последних двух лекциях), то желательно следовать этому соглашению.
-Большинство спецификаций начинаются с <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>, где <span class="inlinecode"><span class="id" title="var">n</span></span> — длина массива,
-и доказываются индукцией по <span class="inlinecode"><span class="id" title="var">n</span></span>. Может случиться, что на пустом массиве
-функция не определена (например, максимум). В этом случае можно либо
-формулировать спецификацию в виде <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span>,</span> <span class="inlinecode">0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode">…</span>, либо считать,
-что массив всегда непустой, то есть допустимые индексы пробегают от <span class="inlinecode">0</span>
-до <span class="inlinecode"><span class="id" title="var">n</span></span> включительно. Следует учесть, что усложнение спецификации ведет к
-усложнению доказательства, поэтому в таком случае имеет смысл выбрать
-второй путь, как было сделано в лекциях 6 и 7.
-
-<div class="paragraph"> </div>
-
 <a id="lab2"></a><h2 class="section">Описание проектов</h2>
 
 
 <div class="paragraph"> </div>
 
-<strong>1.</strong> Проверить, является ли массив отсортированным
-по возрастанию (допускаются одинаковые элементы). Требуется написать
-функцию
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">arraySorted</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">bool</span> := ...
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-и предикат
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="keyword">Definition</span> <span class="id" title="var">sorted</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="keyword">Prop</span> :=<br/>
-&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">i</span> <span class="id" title="var">j</span>, <span class="id" title="var">i</span> &lt; <span class="id" title="var">j</span> → <span class="id" title="var">j</span> &lt; <span class="id" title="var">n</span> → <span class="id" title="var">array</span> <span class="id" title="var">i</span> ≤ <span class="id" title="var">array</span> <span class="id" title="var">j</span>.
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-и доказать следующую теорему.
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="keyword">Theorem</span> <span class="id" title="var">arraySortedSpec</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">sorted</span> <span class="id" title="var">n</span> ↔ <span class="id" title="var">arraySorted</span> <span class="id" title="var">n</span> = <span class="id" title="var">true</span>.
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-<strong>2.</strong> Определить для данных <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>,
+<strong>1.</strong> Определить для данных <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>,
 является ли ограничение <span class="inlinecode"><span class="id" title="var">f</span></span> на <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">n</span>}</span> инъекцией.
 
 <div class="paragraph"> </div>
 
-<strong>3.</strong> Определить для данных <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> и
-<span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>, имеет ли место <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">m</span>}</span> <span class="inlinecode">⊆</span> <span class="inlinecode">{<span class="id" title="var">f</span></span> <span class="inlinecode">0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">n</span>}</span>.
-Таким образом, если <span class="inlinecode"><span class="id" title="var">f</span></span> отображает <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">n</span>}</span> в <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">m</span>}</span>,
+<strong>2.</strong> Определить для данных <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> и
+<span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>, имеет ли место <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">n</span>}</span> <span class="inlinecode">⊆</span> <span class="inlinecode">{<span class="id" title="var">f</span></span> <span class="inlinecode">0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">m</span>}</span>.
+Таким образом, если <span class="inlinecode"><span class="id" title="var">f</span></span> отображает <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">m</span>}</span> в <span class="inlinecode">{0,</span> <span class="inlinecode">...,</span> <span class="inlinecode"><span class="id" title="var">n</span>}</span>,
 нужно определить, является ли <span class="inlinecode"><span class="id" title="var">f</span></span> сюръекцией.
 
 <div class="paragraph"> </div>
 
-<strong>4.</strong> Определить, встречается ли число в двумерном
+<strong>3.</strong> Определить, встречается ли число в двумерном
 массиве. Массив моделируется функцией типа <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>,
 количеством строк и количеством столбцов.
 
@@ -227,13 +176,13 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-<strong>5.</strong> Найти максимум двумерного массива. Массив
+<strong>4.</strong> Найти максимум двумерного массива. Массив
 моделируется, как в предыдущей задаче. Как и там, задачу сначала нужно
 решить для одномерного массива и затем использовать этот результат.
 
 <div class="paragraph"> </div>
 
-<strong>6.</strong> Проверить, является ли массив <span class="inlinecode"><span class="id" title="var">a</span></span> палиндромом,
+<strong>5.</strong> Проверить, является ли массив <span class="inlinecode"><span class="id" title="var">a</span></span> палиндромом,
 то есть имеет ли место <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode"><span class="id" title="var">j</span>,</span> <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">j</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode"><span class="id" title="var">j</span></span>.
 
 <div class="paragraph"> </div>
@@ -259,94 +208,32 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-<strong>7.</strong> Доказать эквивалентность реализаций сложения, умножения, факториала
-и чисел Фибоначчи с хвостовой и нехвостовой рекурсией.
+<strong>6.</strong> Найти наибольший общий делитель чисел <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span> c помощью алгоритма Евклида. Необходимо использовать сильную (возвратную) индукцию, как описано в лекции 8.
 
 <div class="paragraph"> </div>
 
-Нехвостовая рекурсия (определение из стандартной библиотеки)
+<strong>7.</strong> Найти наибольший общий делитель чисел <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span>, перебирая числа от <span class="inlinecode"><span class="id" title="var">min</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> до <span class="inlinecode">1</span>.
 
 <div class="paragraph"> </div>
 
-<br/>
-<span class="inlinecode"><span class="id" title="var">plus1</span> 0 <span class="id" title="var">y</span> = <span class="id" title="var">y</span><br/>
-<span class="id" title="var">plus1</span> (<span class="id" title="var">S</span> <span class="id" title="var">x</span>) <span class="id" title="var">y</span> = <span class="id" title="var">S</span> (<span class="id" title="var">plus1</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>)
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-Хвостовая рекурсия
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="var">plus2</span> 0 <span class="id" title="var">z</span> = <span class="id" title="var">z</span><br/>
-<span class="id" title="var">plus2</span> (<span class="id" title="var">S</span> <span class="id" title="var">x</span>) <span class="id" title="var">z</span> = <span class="id" title="var">plus2</span> <span class="id" title="var">x</span> (<span class="id" title="var">S</span> <span class="id" title="var">z</span>)
-<div class="paragraph"> </div>
-
-</span>
-<div class="paragraph"> </div>
-
-Определение факториала с использованием хвостовой и нехвостовой
-рекурсии см. в лекции 2 из прошлого семестра.
+В Coq есть операция <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> (или <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>), которая возвращает
+остаток от деления <span class="inlinecode"><span class="id" title="var">m</span></span> на <span class="inlinecode"><span class="id" title="var">n</span></span>. Однако поскольку все функции в Coq
+являются тотальными, значение выражения <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode">0</span> равно <span class="inlinecode">0</span> по
+определению. Также есть предикат <span class="inlinecode">(<span class="id" title="var">n</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">m</span>)</span> (пишется в скобках; или
+<span class="inlinecode"><span class="id" title="var">divide</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>), который равен <span class="inlinecode"><span class="id" title="var">True</span></span>, если <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">делит</span> <span class="inlinecode"><span class="id" title="var">m</span></span>. Следует
+обратить внимание, что <span class="inlinecode"><span class="id" title="var">modulo</span></span> возвращает <span class="inlinecode"><span class="id" title="var">nat</span></span> и следовательно может
+быть использован в программах, в то время как <span class="inlinecode"><span class="id" title="var">divide</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> возвращает
+<span class="inlinecode"><span class="id" title="keyword">Prop</span></span> и может использоваться только в спецификациях.
 
 <div class="paragraph"> </div>
 
-Требуется доказать: <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span>,</span> <span class="inlinecode"><span class="id" title="var">plus1</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">plus2</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> и аналогично
-для умножения, факториала и чисел Фибоначчи. Для доказательства
-равенства последних двух функций нужно придумать нетривиальный
-инвариант, то есть усиление утверждения, доказываемого по индукции.
-
-<div class="paragraph"> </div>
-
-В этом проекте не следует использовать идентификаторы <span class="inlinecode"><span class="id" title="var">plus</span></span>, <span class="inlinecode"><span class="id" title="var">mult</span></span> и
-<span class="inlinecode"><span class="id" title="var">fact</span></span>, а также соответствующие функции из стандартной библиотеки.
-
-<div class="paragraph"> </div>
-
-Для функций, определенных в этом проекте, можно ввести
-инфиксные операторы, например:
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="keyword">Infix</span> "+1" := <span class="id" title="var">plus1</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 50, <span class="id" title="tactic">left</span> <span class="id" title="keyword">associativity</span>).<br/>
-<span class="id" title="keyword">Infix</span> "*1" := <span class="id" title="var">mult1</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 40, <span class="id" title="tactic">left</span> <span class="id" title="keyword">associativity</span>).
-<div class="paragraph"> </div>
-
-</span>После этого можно писать <span class="inlinecode"><span class="id" title="keyword">Compute</span></span> <span class="inlinecode">3</span> <span class="inlinecode">+1</span> <span class="inlinecode">4</span> и <span class="inlinecode"><span class="id" title="keyword">Compute</span></span> <span class="inlinecode">3</span> <span class="inlinecode">*1</span> <span class="inlinecode">4</span>.
-
-<div class="paragraph"> </div>
-
-<strong>8.</strong> Найти наибольший делитель числа, строго меньший самого
-числа. Делитель не обязательно должен быть простым.  В Coq есть
-операция <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> (или <span class="inlinecode"><span class="id" title="var">modulo</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>), которая возвращает остаток от
-деления <span class="inlinecode"><span class="id" title="var">m</span></span> на <span class="inlinecode"><span class="id" title="var">n</span></span>. Однако поскольку все функции в Coq являются
-тотальными, значение выражения <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">mod</span></span> <span class="inlinecode">0</span> равно <span class="inlinecode">0</span> по определению. Также
-есть предикат <span class="inlinecode">(<span class="id" title="var">n</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">m</span>)</span> (пишется в скобках; или <span class="inlinecode"><span class="id" title="var">divide</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>), который
-равен <span class="inlinecode"><span class="id" title="var">True</span></span>, если <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">делит</span> <span class="inlinecode"><span class="id" title="var">m</span></span>.  Следует обратить внимание, что <span class="inlinecode"><span class="id" title="var">modulo</span></span>
-возвращает <span class="inlinecode"><span class="id" title="var">nat</span></span> и следовательно может быть использован в программах, в
-то время как <span class="inlinecode"><span class="id" title="var">divide</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> возвращает <span class="inlinecode"><span class="id" title="keyword">Prop</span></span> и может использоваться только
-в спецификациях.
-
-<div class="paragraph"> </div>
-
-<strong>9.</strong> Найти наибольший общий делитель чисел <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span> c помощью алгоритма Евклида.
-
-<div class="paragraph"> </div>
-
-<strong>10.</strong> Найти наибольший общий делитель чисел <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span>, перебирая числа от <span class="inlinecode"><span class="id" title="var">min</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> до <span class="inlinecode">1</span>.
-
-<div class="paragraph"> </div>
-
-<strong>11.</strong> Проверить, является ли число <span class="inlinecode"><span class="id" title="var">n</span></span> простым с помощью перебора всех
+<strong>8.</strong> Проверить, является ли число <span class="inlinecode"><span class="id" title="var">n</span></span> простым с помощью перебора всех
 потенциальных делителей от <span class="inlinecode">2</span> до <span class="inlinecode"><span class="id" title="var">n</span>-1</span>. При желании можно перебирать числа
 до квадратного корня из <span class="inlinecode"><span class="id" title="var">n</span></span>.
 
 <div class="paragraph"> </div>
 
-<strong>12.</strong> Найти целочисленный корень уравнения <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=</span>
+<strong>9.</strong> Найти целочисленный корень уравнения <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=</span>
 <span class="inlinecode"><span class="id" title="var">y</span></span>. Рассмотрим следующие предположения (должны быть объявлены внутри
 <span class="inlinecode"><span class="id" title="keyword">Section</span></span>).
 
@@ -371,18 +258,11 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 предположениях неограниченности <span class="inlinecode"><span class="id" title="var">f</span></span> и <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">0</span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">y</span></span> находит целочисленный
 корень. Функция может перебирать значения <span class="inlinecode"><span class="id" title="var">x</span></span>, начиная с числа,
 предшествующего <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode">(<span class="id" title="var">g</span></span> <span class="inlinecode"><span class="id" title="var">y</span>)</span>, до 0 и проверять, являются ли они корнями
-уравнения.
+уравнения. Проверьте работу функции при <span class="inlinecode"><span class="id" title="var">f</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">x</span>×<span class="id" title="var">x</span></span> и <span class="inlinecode"><span class="id" title="var">g</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">n</span>+1</span>.
 
 <div class="paragraph"> </div>
 
-<strong>13.</strong> Целочисленным логарифмом числа <span class="inlinecode"><span class="id" title="var">n</span></span> по основанию <span class="inlinecode"><span class="id" title="var">b</span></span> называется
-максимальное число <span class="inlinecode"><span class="id" title="var">p</span></span>, такое что <span class="inlinecode"><span class="id" title="var">b</span>^<span class="id" title="var">p</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>. Требуется написать функцию
-<span class="inlinecode"><span class="id" title="var">log</span></span> <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>, вычисляющую целочисленный логарифм. Можно использовать
-функцию возведения в степень, которая обозначается <span class="inlinecode"><span class="id" title="var">x</span>^<span class="id" title="var">y</span></span> или <span class="inlinecode"><span class="id" title="var">pow</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span>.
-
-<div class="paragraph"> </div>
-
-<strong>14.</strong> Рассмотрим представление натуральных чисел по
+<strong>10.</strong> Рассмотрим представление натуральных чисел по
 основанию <span class="inlinecode"><span class="id" title="var">b</span></span> <span class="inlinecode">&gt;</span> <span class="inlinecode">1</span>. Цифры числа содержатся в массиве типа <span class="inlinecode"><span class="id" title="var">nat</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">nat</span></span>,
 причем самый младший разряд имеет индекс 0. Нужно написать
 следующие функции.
@@ -421,12 +301,7 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-Можно использовать функции <span class="inlinecode"><span class="id" title="var">div</span></span> и <span class="inlinecode"><span class="id" title="var">modulo</span></span> или соответствующие
-нотации <span class="inlinecode">/</span> и <span class="inlinecode"><span class="id" title="var">mod</span></span> для целочисленного деления и взятия остатка.
-
-<div class="paragraph"> </div>
-
-<strong>15.</strong> Вычислить значение полинома в точке <span class="inlinecode"><span class="id" title="var">x</span></span> методом
+<strong>11.</strong> Вычислить значение полинома в точке <span class="inlinecode"><span class="id" title="var">x</span></span> методом
 Горнера и доказать, что оно равно значению, вычисленному обычным
 образом. Для данного <span class="inlinecode"><span class="id" title="var">n</span></span> массив a представляет полином <span class="inlinecode">(<span class="id" title="var">a</span></span> <span class="inlinecode">0)*<span class="id" title="var">x</span>^<span class="id" title="var">n</span></span> <span class="inlinecode">+</span> <span class="inlinecode">(<span class="id" title="var">a</span></span>
 <span class="inlinecode">1)*<span class="id" title="var">x</span>^(<span class="id" title="var">n</span>-1)</span> <span class="inlinecode">+</span> <span class="inlinecode">...</span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>. Про метод Горнера см. упражнение 3 в домашнем
@@ -436,7 +311,7 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-<strong>16.</strong> Реализовать быстрое умножение двоичного числа
+<strong>12.</strong> Реализовать быстрое умножение двоичного числа
 на число Пеано. Двоичное число представлено массивом из <span class="inlinecode">0</span> и <span class="inlinecode">1</span> длины
 <span class="inlinecode"><span class="id" title="var">n</span>+1</span>. Старшие биты числа, как обычно, находятся слева. Второе число —
 это просто элемент типа <span class="inlinecode"><span class="id" title="var">nat</span></span>. Требуется реализовать метод умножения,
@@ -459,7 +334,7 @@ href="https://docs.google.com/spreadsheets/d/1tq-2hIgI9pXjwx5Iy40afqTUKGOWGlXdBT
 
 <div class="paragraph"> </div>
 
-<strong>17.</strong> Даны следующие функции и предположения.
+<strong>13.</strong> Даны следующие функции и предположения.
 
 <div class="paragraph"> </div>
 
