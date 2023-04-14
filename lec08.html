@@ -471,7 +471,35 @@
 </div>
 
 <div class="doc">
-<a id="lab4"></a><h2 class="section">Определение и упрощение рекурсивных функций</h2>
+<a id="lab4"></a><h2 class="section">Возвратная (сильная) индукция</h2>
+
+
+<div class="paragraph"> </div>
+
+В библиотеке Coq есть следующая теорема.
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">Theorem</span> <span class="id" title="var">lt_wf_ind</span> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) (<span class="id" title="var">P</span> : <span class="id" title="var">nat</span> → <span class="id" title="keyword">Prop</span>),<br/>
+&nbsp;&nbsp;(<span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> : <span class="id" title="var">nat</span>, (<span class="id" title="keyword">∀</span> <span class="id" title="var">k</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">k</span> &lt; <span class="id" title="var">m</span> → <span class="id" title="var">P</span> <span class="id" title="var">k</span>) → <span class="id" title="var">P</span> <span class="id" title="var">m</span>) → <span class="id" title="var">P</span> <span class="id" title="var">n</span>.
+<div class="paragraph"> </div>
+
+</span>
+<div class="paragraph"> </div>
+
+Замечание: <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode">(<span class="id" title="var">n</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>)</span> можно перенести в конец перед <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>.
+С помощью этой теоремы можно доказывать утверждения, если в шаге
+индукции доказательство <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> использует предположения <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span>, где
+<span class="inlinecode"><span class="id" title="var">k</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">m</span></span>. Примером является доказательство корректности алгоритма
+Евклида для вычисления наибольшего общего делителя (см. ниже).
+В этом случае вместо <span class="inlinecode"><span class="id" title="tactic">induction</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[|</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">IH</span>]</span> нужно писать
+<span class="inlinecode"><span class="id" title="tactic">induction</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[<span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">IH</span>]</span> <span class="inlinecode"><span class="id" title="keyword">using</span></span> <span class="inlinecode"><span class="id" title="var">lt_wf_ind</span></span>. Если текущая цель имеет
+вид <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span>, то это тактика предлагает доказать <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> из посылки
+<span class="inlinecode"><span class="id" title="var">IH</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">k</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span>. 
+<div class="paragraph"> </div>
+
+<a id="lab5"></a><h2 class="section">Определение и упрощение рекурсивных функций</h2>
 
 
 <div class="paragraph"> </div>
@@ -481,8 +509,8 @@
 корректности логики и разрешимости проверки типов. Оно гарантируется
 тем, что аргумент рекурсивного вызова доложен быть переменной, которая
 является непосредственным подтермом исходного аргумента. Например,
-если исходный аргумент <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется в конструкции <span class="inlinecode"><span class="id" title="keyword">match</span></span> с
-термом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>, то аргументом рекурсивного вызова может быть только <span class="inlinecode"><span class="id" title="var">m</span></span>.
+если в конструкции <span class="inlinecode"><span class="id" title="keyword">match</span></span> исходный аргумент <span class="inlinecode"><span class="id" title="var">n</span></span> сопоставляется с
+термом <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span>, то аргументом рекурсивного вызова должен быть <span class="inlinecode"><span class="id" title="var">m</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -713,11 +741,11 @@ Coq попытался упростить <span class="inlinecode"><span class="
 </div>
 
 <div class="doc">
-<a id="lab5"></a><h2 class="section">Дополнительные тактики</h2>
+<a id="lab6"></a><h2 class="section">Дополнительные тактики</h2>
 
 <div class="paragraph"> </div>
 
-<a id="lab6"></a><h3 class="section">Комбинирование <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> и <span class="inlinecode"><span class="id" title="tactic">intros</span></span></h3>
+<a id="lab7"></a><h3 class="section">Комбинирование <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> и <span class="inlinecode"><span class="id" title="tactic">intros</span></span></h3>
 
 <div class="paragraph"> </div>
 
@@ -728,11 +756,11 @@ Coq попытался упростить <span class="inlinecode"><span class="
 нужно использовать <span class="inlinecode"><span class="id" title="tactic">intros</span></span>, а не <span class="inlinecode"><span class="id" title="tactic">intro</span></span>. 
 <div class="paragraph"> </div>
 
-<a id="lab7"></a><h3 class="section">Использование предикатов, кроме <span class="inlinecode">&lt;?</span>, <span class="inlinecode">&lt;=?</span> и <span class="inlinecode">=?</span> в <span class="inlinecode"><span class="id" title="keyword">if</span></span></h3>
+<a id="lab8"></a><h3 class="section">Использование предикатов, кроме <span class="inlinecode">&lt;?</span>, <span class="inlinecode">&lt;=?</span> и <span class="inlinecode">=?</span> в <span class="inlinecode"><span class="id" title="keyword">if</span></span></h3>
 
 <div class="paragraph"> </div>
 
- Тактику <span class="inlinecode"><span class="id" title="var">bdestruct</span></span>, определенная в лекции 7, можно использовать
+ Тактику <span class="inlinecode"><span class="id" title="var">bdestruct</span></span>, определенную в лекции 6, можно использовать
 только для упрощения выражений <span class="inlinecode"><span class="id" title="keyword">if</span></span> <span class="inlinecode"><span class="id" title="var">e1</span></span> <span class="inlinecode"><span class="id" title="var">R</span></span> <span class="inlinecode"><span class="id" title="var">e2</span></span> <span class="inlinecode"><span class="id" title="keyword">then</span></span> <span class="inlinecode"><span class="id" title="var">u</span></span> <span class="inlinecode"><span class="id" title="keyword">else</span></span> <span class="inlinecode"><span class="id" title="var">v</span></span>, где <span class="inlinecode"><span class="id" title="var">R</span></span>
 есть <span class="inlinecode">&lt;?</span>, <span class="inlinecode">&lt;=?</span> и <span class="inlinecode">=?</span>. Если условие <span class="inlinecode"><span class="id" title="var">E</span></span> имеет другой вид, например,
 <span class="inlinecode">(<span class="id" title="var">x</span></span> <span class="inlinecode">=?</span> <span class="inlinecode"><span class="id" title="var">y</span>)</span> <span class="inlinecode">&amp;&amp;</span> <span class="inlinecode">(<span class="id" title="var">x</span></span> <span class="inlinecode">&lt;?</span> <span class="inlinecode"><span class="id" title="var">z</span>)</span> то можно воспользоваться следующей формой
@@ -749,10 +777,88 @@ Coq попытался упростить <span class="inlinecode"><span class="
 
 Она создает две цели. В первой выражение <span class="inlinecode"><span class="id" title="var">E</span></span> заменяется на <span class="inlinecode"><span class="id" title="var">true</span></span> и
 добавляется посылка <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">E</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">true</span></span>, а во второй <span class="inlinecode"><span class="id" title="var">E</span></span> заменяется на
-<span class="inlinecode"><span class="id" title="var">false</span></span> и добавляется посылка <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">E</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">false</span></span>. 
+<span class="inlinecode"><span class="id" title="var">false</span></span> и добавляется посылка <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">E</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">false</span></span>.
+
 <div class="paragraph"> </div>
 
-<a id="lab8"></a><h3 class="section">Доказательство целей с ложной посылкой</h3>
+Пример. Кроме <span class="inlinecode"><span class="id" title="var">Even</span></span>, в библиотеке Coq есть предикат <span class="inlinecode"><span class="id" title="var">Odd</span></span>, а также
+их разрешимые аналоги <span class="inlinecode"><span class="id" title="var">even</span></span> и <span class="inlinecode"><span class="id" title="var">odd</span></span> и следующие утверждения.
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">Definition</span> <span class="id" title="var">Odd</span>  (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="keyword">Prop</span> := <span class="id" title="tactic">exists</span> <span class="id" title="var">m</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">n</span> = 2 * <span class="id" title="var">m</span> + 1.<br/>
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">even</span> (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">bool</span> := ...<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">odd</span>  (<span class="id" title="var">n</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">bool</span> := ...<br/>
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">even_spec</span>   : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">even</span> <span class="id" title="var">n</span> = <span class="id" title="var">true</span> ↔ <span class="id" title="var">Even</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">Even_or_Odd</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> : <span class="id" title="var">nat</span>, <span class="id" title="var">Even</span> <span class="id" title="var">n</span> ∨ <span class="id" title="var">Odd</span> <span class="id" title="var">n</span>.
+<div class="paragraph"> </div>
+
+</span>
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">even_false</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">even</span> <span class="id" title="var">n</span> = <span class="id" title="var">false</span> → <span class="id" title="var">Odd</span> <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intros</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> : ¬<span class="id" title="var">Even</span> <span class="id" title="var">n</span>).<br/>
+* <span class="id" title="tactic">intro</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">even_spec</span>, <span class="id" title="var">H</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H2</span>. <span class="id" title="var">easy</span>.<br/>
+* <span class="id" title="tactic">assert</span> (<span class="id" title="var">H2</span> := <span class="id" title="var">Even_or_Odd</span> <span class="id" title="var">n</span>). <span class="id" title="tactic">destruct</span> <span class="id" title="var">H2</span>; <span class="id" title="tactic">trivial</span>.<br/>
+</div>
+
+<div class="doc">
+Тактика <span class="inlinecode"><span class="id" title="tactic">trivial</span></span> доказывает одну из целей, порожденных <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="var">exfalso</span>. <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Тактики <span class="inlinecode"><span class="id" title="var">exfalso</span></span> заменяет любую цель на <span class="inlinecode"><span class="id" title="var">False</span></span> (см. ниже).
+
+<div class="paragraph"> </div>
+
+Рассмотрим следующую функцию.
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">g</span> <span class="id" title="var">n</span> := <span class="id" title="keyword">if</span> <span class="id" title="var">even</span> <span class="id" title="var">n</span> <span class="id" title="keyword">then</span> <span class="id" title="var">n</span>^2 <span class="id" title="keyword">else</span> <span class="id" title="var">n</span>+1.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">g_even</span>: <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>, <span class="id" title="var">Even</span> (<span class="id" title="var">g</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+<span class="id" title="tactic">intro</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">unfold</span> <span class="id" title="var">g</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">even</span> <span class="id" title="var">n</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Если написать просто <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode">(<span class="id" title="var">even</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>, то <span class="inlinecode"><span class="id" title="var">even</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> точно так же
+заменится на <span class="inlinecode"><span class="id" title="var">true</span></span> и <span class="inlinecode"><span class="id" title="var">false</span></span> в порожденных целях, однако те же самые
+утверждения <span class="inlinecode"><span class="id" title="var">Even</span></span> <span class="inlinecode">(<span class="id" title="var">n</span></span> <span class="inlinecode">^</span> <span class="inlinecode">2)</span> и <span class="inlinecode"><span class="id" title="var">Even</span></span> <span class="inlinecode">(<span class="id" title="var">n</span></span> <span class="inlinecode">+</span> <span class="inlinecode">1)</span> нужно будет доказать без
+всяких посылок, что невозможно. Другими словами, информация, о том,
+что even <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">true</span></span> или <span class="inlinecode"><span class="id" title="var">even</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">false</span></span>, будет потеряна. 
+</div>
+<div class="code">
+
+<br/>
+* <span class="id" title="tactic">rewrite</span> <span class="id" title="var">even_spec</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">m</span> <span class="id" title="var">H</span>]. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">exists</span> (2 * <span class="id" title="var">m</span>^2). <span class="id" title="tactic">unfold</span> <span class="id" title="var">pow</span>. <span class="id" title="tactic">ring</span>.<br/>
+* <span class="id" title="tactic">destruct</span> (<span class="id" title="var">even_false</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>) <span class="id" title="keyword">as</span> [<span class="id" title="var">m</span> <span class="id" title="var">H1</span>]. <span class="id" title="tactic">subst</span> <span class="id" title="var">n</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">exists</span> (<span class="id" title="var">m</span> + 1). <span class="id" title="tactic">ring</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab9"></a><h3 class="section">Доказательство целей с ложной посылкой</h3>
 
 <div class="paragraph"> </div>
 
@@ -829,7 +935,7 @@ Coq попытался упростить <span class="inlinecode"><span class="
 </div>
 
 <div class="doc">
-<a id="lab9"></a><h3 class="section">Автоматические тактики</h3>
+<a id="lab10"></a><h3 class="section">Автоматические тактики</h3>
 
 <div class="paragraph"> </div>
 
@@ -972,11 +1078,14 @@ Coq попытался упростить <span class="inlinecode"><span class="
 </div>
 
 <div class="doc">
-<a id="lab10"></a><h3 class="section">Команды <span class="inlinecode"><span class="id" title="keyword">Show</span></span> и <span class="inlinecode"><span class="id" title="var">Focus</span></span></h3>
+<a id="lab11"></a><h3 class="section">Команды <span class="inlinecode"><span class="id" title="keyword">Show</span></span> и <span class="inlinecode"><span class="id" title="var">Focus</span></span></h3>
 
 <div class="paragraph"> </div>
 
- Если в данный момент в доказательстве имеется несколько подцелей, то команда <span class="inlinecode"><span class="id" title="keyword">Show</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span> показывает <span class="inlinecode"><span class="id" title="var">k</span></span>-ю из них. Так, например, посмотреть шаг индукции, не заканчивая доказательство базы, можно следующим образом.
+ Если в данный момент в доказательстве имеется несколько подцелей,
+то команда <span class="inlinecode"><span class="id" title="keyword">Show</span></span> <span class="inlinecode"><span class="id" title="var">k</span></span> показывает <span class="inlinecode"><span class="id" title="var">k</span></span>-ю из них. Так, например, посмотреть
+шаг индукции, не заканчивая доказательство базы, можно следующим
+образом.
 
 <div class="paragraph"> </div>
 
@@ -996,7 +1105,7 @@ Coq попытался упростить <span class="inlinecode"><span class="
 следует удалять перед подачей проекта на проверку. 
 <div class="paragraph"> </div>
 
-<a id="lab11"></a><h2 class="section">Напоминания и советы</h2>
+<a id="lab12"></a><h2 class="section">Напоминания и советы</h2>
 
 <div class="paragraph"> </div>
 
@@ -1029,8 +1138,9 @@ Coq попытался упростить <span class="inlinecode"><span class="
 
 
 </li>
-<li> Можно использовать логические операции на <span class="inlinecode"><span class="id" title="var">bool</span></span>: конъюнкцию <span class="inlinecode">&amp;&amp;</span> (идентификатор <span class="inlinecode"><span class="id" title="var">andb</span></span>),
-  дизъюнкцию <span class="inlinecode">||</span> (<span class="inlinecode"><span class="id" title="var">orb</span></span>) и отрицание <span class="inlinecode"><span class="id" title="var">negb</span></span> (без нотации).
+<li> Можно использовать логические операции на <span class="inlinecode"><span class="id" title="var">bool</span></span>: конъюнкцию <span class="inlinecode">&amp;&amp;</span>
+  (идентификатор <span class="inlinecode"><span class="id" title="var">andb</span></span>), дизъюнкцию <span class="inlinecode">||</span> (<span class="inlinecode"><span class="id" title="var">orb</span></span>) и отрицание <span class="inlinecode"><span class="id" title="var">negb</span></span>
+  (без нотации).
 
 <div class="paragraph"> </div>
 
