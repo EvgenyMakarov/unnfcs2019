@@ -154,8 +154,8 @@ Gamma, A |- C    Gamma, B |- C------------------------------       Gamma, A \/
 
 <div class="paragraph"> </div>
 
-<span class="inlinecode">¬<span class="id" title="var">A</span></span> (отрицание <span class="inlinecode"><span class="id" title="var">A</span></span>) является сокращением для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, что в свою очередь
-по определению является <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span>, где <span class="inlinecode"><span class="id" title="var">False</span></span> — тождественно ложная
+<span class="inlinecode">~<span class="id" title="var">A</span></span> (отрицание <span class="inlinecode"><span class="id" title="var">A</span></span>) является сокращением для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, что в свою очередь
+по определению является <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span></span>, где <span class="inlinecode"><span class="id" title="var">False</span></span> — тождественно ложная
 формула. Это можно увидеть с помощью тактики <span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">not</span></span>. Благодаря этому
 определению правила для отрицания являются производными от правил для
 импликации.
@@ -195,7 +195,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <div class="paragraph"> </div>
 
  Логические связки располагаются в порядке убывания приоритета
-следующим образом: <span class="inlinecode">¬</span>, <span class="inlinecode">∧</span>, <span class="inlinecode">∨</span>, <span class="inlinecode">↔</span>, <span class="inlinecode">→</span> 
+следующим образом: <span class="inlinecode">~</span>, <span class="inlinecode">/\</span>, <span class="inlinecode">\/</span>, <span class="inlinecode">&lt;-&gt;</span>, <span class="inlinecode">-&gt;</span> 
 </div>
 <div class="code">
 
@@ -203,7 +203,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Variables</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> : <span class="id" title="keyword">Prop</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t1</span> : <span class="id" title="var">A</span> → <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t1</span> : <span class="id" title="var">A</span> -&gt; <span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 
 <br/>
@@ -278,7 +278,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Proposition</span> <span class="id" title="var">t2</span> : (<span class="id" title="var">A</span> → <span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Proposition</span> <span class="id" title="var">t2</span> : (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>) -&gt; (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">B</span>) -&gt; (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">C</span>).<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span> <span class="id" title="var">H3</span>.<br/>
 <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>.<br/>
@@ -288,7 +288,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">syllogism</span> : (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → (<span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → <span class="id" title="var">A</span> → <span class="id" title="var">C</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">syllogism</span> : (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">B</span>) -&gt; (<span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>) -&gt; <span class="id" title="var">A</span> -&gt; <span class="id" title="var">C</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span> <span class="id" title="var">H3</span>.<br/>
 <span class="id" title="tactic">apply</span> <span class="id" title="var">H2</span>.<br/>
@@ -297,7 +297,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t3</span> : <span class="id" title="var">A</span> ∧ <span class="id" title="var">B</span> → <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t3</span> : <span class="id" title="var">A</span> /\ <span class="id" title="var">B</span> -&gt; <span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
 <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">K</span> <span class="id" title="var">L</span>].<br/>
@@ -305,7 +305,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t4</span> : (<span class="id" title="var">A</span> ∨ <span class="id" title="var">B</span> → <span class="id" title="var">C</span>) → (<span class="id" title="var">A</span> → <span class="id" title="var">C</span>) ∧ (<span class="id" title="var">B</span> → <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t4</span> : (<span class="id" title="var">A</span> \/ <span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>) -&gt; (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">C</span>) /\ (<span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>).<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>.<br/>
 <span class="id" title="tactic">split</span>.<br/>
@@ -355,15 +355,15 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t5</span> : (~<span class="id" title="var">A</span> ∨ ¬<span class="id" title="var">B</span>) → ~(<span class="id" title="var">A</span> ∧ <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">t5</span> : (~<span class="id" title="var">A</span> \/ ~<span class="id" title="var">B</span>) -&gt; ~(<span class="id" title="var">A</span> /\ <span class="id" title="var">B</span>).<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<span class="inlinecode">¬<span class="id" title="var">A</span></span> — это обозначение для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, a <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> определяется как
-<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span> 
+<span class="inlinecode">~<span class="id" title="var">A</span></span> — это обозначение для <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, a <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> определяется как
+<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span></span> 
 </div>
 <div class="code">
 
@@ -377,7 +377,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Fact</span> <span class="id" title="var">double_negation</span> : <span class="id" title="var">A</span> → ~~<span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">double_negation</span> : <span class="id" title="var">A</span> -&gt; ~~<span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 
 <br/>
@@ -387,8 +387,8 @@ Gamma, A |- False------------------   Gamma |- ~A
 </div>
 
 <div class="doc">
-<span class="inlinecode">~~<span class="id" title="var">A</span></span> есть <span class="inlinecode">(<span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span>)</span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span>. Для того, чтобы перенести
-<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span> в список посылок, не обязательно говорить <span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">not</span></span>. 
+<span class="inlinecode">~~<span class="id" title="var">A</span></span> есть <span class="inlinecode">(<span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span>)</span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span></span>. Для того, чтобы перенести
+<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span></span> в список посылок, не обязательно говорить <span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">not</span></span>. 
 </div>
 <div class="code">
 
@@ -399,7 +399,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 </div>
 
 <div class="doc">
-<span class="inlinecode"><span class="id" title="var">H2</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span> 
+<span class="inlinecode"><span class="id" title="var">H2</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">False</span></span> 
 </div>
 <div class="code">
 
@@ -412,14 +412,14 @@ Gamma, A |- False------------------   Gamma |- ~A
 </div>
 
 <div class="doc">
-<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">B</span></span> — это обозначение для <span class="inlinecode"><span class="id" title="var">iff</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, что в свою очередь значит
-по определению <span class="inlinecode">(<span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span>)</span> <span class="inlinecode">∧</span> <span class="inlinecode">(<span class="id" title="var">B</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">A</span>)</span>. В этом можно убедиться с помощью
-<span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">iff</span></span>. Например, дадим временную недоказуемую цель <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">B</span></span>. 
+<span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">&lt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span></span> — это обозначение для <span class="inlinecode"><span class="id" title="var">iff</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, что в свою очередь значит
+по определению <span class="inlinecode">(<span class="id" title="var">A</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span>)</span> <span class="inlinecode">/\</span> <span class="inlinecode">(<span class="id" title="var">B</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" title="var">A</span>)</span>. В этом можно убедиться с помощью
+<span class="inlinecode"><span class="id" title="tactic">unfold</span></span> <span class="inlinecode"><span class="id" title="var">iff</span></span>. Например, дадим временную недоказуемую цель <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">&lt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span></span>. 
 </div>
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Goal</span> <span class="id" title="var">A</span> ↔ <span class="id" title="var">B</span>.<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="var">A</span> &lt;-&gt; <span class="id" title="var">B</span>.<br/>
 <span class="id" title="tactic">unfold</span> <span class="id" title="var">iff</span>.<br/>
 <span class="id" title="tactic">split</span>.<br/>
 <span class="id" title="keyword">Abort</span>.<br/>
@@ -428,8 +428,8 @@ Gamma, A |- False------------------   Gamma |- ~A
 </div>
 
 <div class="doc">
-Поэтому доказывать цель вида <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">B</span></span> нужно тактикой <span class="inlinecode"><span class="id" title="tactic">split</span></span>,
-а использовать посылку вида <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">B</span></span> с помощью
+Поэтому доказывать цель вида <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">&lt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span></span> нужно тактикой <span class="inlinecode"><span class="id" title="tactic">split</span></span>,
+а использовать посылку вида <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">&lt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span></span> с помощью
 тактики <span class="inlinecode"><span class="id" title="tactic">destruct</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode"><span class="id" title="keyword">as</span></span> <span class="inlinecode">[<span class="id" title="var">H1</span></span> <span class="inlinecode"><span class="id" title="var">H2</span>]</span>, где <span class="inlinecode"><span class="id" title="var">H1</span></span> и <span class="inlinecode"><span class="id" title="var">H2</span></span> — новые идентификаторы. 
 </div>
 <div class="code">
@@ -463,7 +463,7 @@ Gamma, A |- False------------------   Gamma |- ~A
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Corollary</span> <span class="id" title="var">double_impl</span> : <span class="id" title="var">A</span> → (<span class="id" title="var">A</span> → <span class="id" title="var">B</span>) → <span class="id" title="var">B</span>.<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">double_impl</span> : <span class="id" title="var">A</span> -&gt; (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">B</span>) -&gt; <span class="id" title="var">B</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
@@ -477,25 +477,25 @@ Gamma, A |- False------------------   Gamma |- ~A
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Proposition</span> <span class="id" title="var">disj_elim</span> : (<span class="id" title="var">A</span> ∨ <span class="id" title="var">B</span> → <span class="id" title="var">C</span>) ↔ (<span class="id" title="var">A</span> → <span class="id" title="var">C</span>) ∧ (<span class="id" title="var">B</span> → <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Proposition</span> <span class="id" title="var">disj_elim</span> : (<span class="id" title="var">A</span> \/ <span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>) &lt;-&gt; (<span class="id" title="var">A</span> -&gt; <span class="id" title="var">C</span>) /\ (<span class="id" title="var">B</span> -&gt; <span class="id" title="var">C</span>).<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">conj_disj_distr</span> : <span class="id" title="var">A</span> ∧ (<span class="id" title="var">B</span> ∨ <span class="id" title="var">C</span>) ↔ <span class="id" title="var">A</span> ∧ <span class="id" title="var">B</span> ∨ <span class="id" title="var">A</span> ∧ <span class="id" title="var">C</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">conj_disj_distr</span> : <span class="id" title="var">A</span> /\ (<span class="id" title="var">B</span> \/ <span class="id" title="var">C</span>) &lt;-&gt; <span class="id" title="var">A</span> /\ <span class="id" title="var">B</span> \/ <span class="id" title="var">A</span> /\ <span class="id" title="var">C</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_intro</span> : <span class="id" title="var">A</span> → ~~<span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_intro</span> : <span class="id" title="var">A</span> -&gt; ~~<span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_elim</span> : ~~~<span class="id" title="var">A</span> → ¬<span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">double_neg_elim</span> : ~~~<span class="id" title="var">A</span> -&gt; ~<span class="id" title="var">A</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">deMorgan</span> : ~(<span class="id" title="var">A</span> ∨ <span class="id" title="var">B</span>) ↔ ¬<span class="id" title="var">A</span> ∧ ¬<span class="id" title="var">B</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">deMorgan</span> : ~(<span class="id" title="var">A</span> \/ <span class="id" title="var">B</span>) &lt;-&gt; ~<span class="id" title="var">A</span> /\ ~<span class="id" title="var">B</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="var">Admitted</span>.<br/>
 
