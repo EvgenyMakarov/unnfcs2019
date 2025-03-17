@@ -21,6 +21,8 @@
 <br/>
 
 <br/>
+
+<br/>
 </div>
 
 <div class="doc">
@@ -37,7 +39,7 @@
 </div>
 
 <div class="doc">
-<a id="lab2"></a><h2 class="section">Бестиповое лямбда-исчисление (напоминание материала прошлого семестра)</h2>
+<a id="lab2"></a><h2 class="section">Бестиповое лямбда-исчисление</h2>
 
 
 <div class="paragraph"> </div>
@@ -94,10 +96,18 @@
 <div class="paragraph"> </div>
 
 <br/>
-<span class="inlinecode"><span class="id" title="keyword">Definition</span> <span class="id" title="var">sqr</span>(<span class="id" title="var">x</span> : <span class="id" title="var">nat</span>) : <span class="id" title="var">nat</span> := <span class="id" title="var">x</span> * <span class="id" title="var">x</span>.
+<span class="inlinecode"><span class="id" title="keyword">Definition</span> <span class="id" title="var">sqr</span> <span class="id" title="var">x</span> := <span class="id" title="var">x</span> * <span class="id" title="var">x</span>.
 <div class="paragraph"> </div>
 
-</span>добавляет правило <span class="inlinecode"><span class="id" title="var">sqr</span></span> <span class="inlinecode">2</span> →<sub>δ</sub> <span class="inlinecode">2</span> <span class="inlinecode">*</span> <span class="inlinecode">2</span>.
+</span>есть сокращение для
+
+<div class="paragraph"> </div>
+
+<br/>
+<span class="inlinecode"><span class="id" title="keyword">Definition</span> <span class="id" title="var">sqr</span> := <span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> =&gt; <span class="id" title="var">x</span> * <span class="id" title="var">x</span>.
+<div class="paragraph"> </div>
+
+</span>Оно добавляет правило <span class="inlinecode"><span class="id" title="var">sqr</span></span> <span class="inlinecode">2</span> →<sub>δ</sub> <span class="inlinecode">(<span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">*</span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> <span class="inlinecode">2</span> →<sub>β</sub> <span class="inlinecode">2</span> <span class="inlinecode">*</span> <span class="inlinecode">2</span>.
 
 <div class="paragraph"> </div>
 
@@ -153,11 +163,9 @@
 пропозиционального равенства. 
 <div class="paragraph"> </div>
 
- Пример в лекции 7, слайды 10-11 из предыдущего семестра про
-представление пар в чистом лямбда-исчислении. Эти слайды добавлены на
-<a href="https://source.unn.ru">source.unn.ru</a>. На типы,
-указанные в фигурных скобках и после двоеточий, можно пока не обращать
-внимание. 
+ Ниже приводится пример того, как пары и проекции можно
+закодировать в чистом лямбда-исчислении. На типы, указанные в фигурных
+скобках и после двоеточий, можно пока не обращать внимание. 
 </div>
 <div class="code">
 
@@ -201,9 +209,10 @@
 </div>
 
 <div class="doc">
-В отличие от языков функционального программирования, таких как Racket,
-которые могут работать только с замкнутыми выражениями, Coq может
-упрощать термы со свободными переменными (в данном случае <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span>). 
+В отличие от языков функционального программирования, таких как
+Racket или Haskell, которые могут работать только с замкнутыми
+выражениями, Coq может упрощать термы со свободными переменными (в
+данном случае <span class="inlinecode"><span class="id" title="var">m</span></span> и <span class="inlinecode"><span class="id" title="var">n</span></span>). 
 <div class="paragraph"> </div>
 
 <a id="lab3"></a><h2 class="section">Лямбда-исчисление с простыми типами</h2>
@@ -449,7 +458,8 @@
 </span>
 <div class="paragraph"> </div>
 
-Это правила натурального вывода пропозициональной логики.
+Это правила натурального вывода пропозициональной логики. Они являются
+корректными.
 
 <div class="paragraph"> </div>
 
@@ -511,7 +521,7 @@ Coq построен на соответствии Карри-Говарда. Е
 <div class="paragraph"> </div>
 
 Пример зависимого типа: <span class="inlinecode">1</span> <span class="inlinecode">≤</span> <span class="inlinecode">2</span>, то есть <span class="inlinecode"><span class="id" title="var">le</span></span> <span class="inlinecode">1</span> <span class="inlinecode">2</span> без использования
-обозначений. Здесь 1 и 2 — термы. Существует замкнутый тип
+обозначений. Здесь <span class="inlinecode">1</span> и <span class="inlinecode">2</span> — термы. Существует замкнутый тип
 (доказательство) <span class="inlinecode"><span class="id" title="var">M</span></span>, такой что суждение <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">M</span></span> <span class="inlinecode">:</span> <span class="inlinecode">1</span> <span class="inlinecode">≤</span> <span class="inlinecode">2</span> выводимо. Другой
 пример: существует терм <span class="inlinecode"><span class="id" title="var">N</span></span> со свободными переменными <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">y</span>,</span> <span class="inlinecode"><span class="id" title="var">H</span></span>, такой что
 суждение <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">N</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> выводимо.
@@ -583,11 +593,11 @@ Coq построен на соответствии Карри-Говарда. Е
 где индексы при <span class="inlinecode"><span class="id" title="var">B</span></span> пробегают по множеству <span class="inlinecode"><span class="id" title="var">A</span></span>? Ему соответствует множество
 функций с областью определения <span class="inlinecode"><span class="id" title="var">A</span></span>, которые для каждого <span class="inlinecode"><span class="id" title="var">i</span></span> <span class="inlinecode">∈</span> <span class="inlinecode"><span class="id" title="var">A</span></span> принимают
 значение из <span class="inlinecode"><span class="id" title="var">Bi</span></span>, то есть область значения которых зависит от аргумента.
-Как было сказано выше, это множество обозначается <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>.
+Как было сказано выше, это множество обозначается <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>.
 
 <div class="paragraph"> </div>
 
-Отсюда следует, что <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span> есть частный случай <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>,
+Отсюда следует, что <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span> есть частный случай <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>,
 когда <span class="inlinecode"><span class="id" title="var">B</span></span> не зависит от <span class="inlinecode"><span class="id" title="var">x</span></span>. И действительно, в Coq тип <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">B</span></span> есть
 сокращение для <span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, где <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">∉</span> <span class="inlinecode"><span class="id" title="var">FV</span>(<span class="id" title="var">B</span>)</span>.
 
@@ -598,11 +608,11 @@ Coq построен на соответствии Карри-Говарда. Е
 
 <div class="paragraph"> </div>
 
-<span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">B</span></span> записывается <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>.
+<span class="inlinecode">∀<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>.</span> <span class="inlinecode"><span class="id" title="var">B</span></span> записывается <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>.
 
 <div class="paragraph"> </div>
 
-Тип часто можно не указывать (<span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">M</span></span> и <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>), и Coq
+Тип часто можно не указывать (<span class="inlinecode"><span class="id" title="keyword">fun</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=&gt;</span> <span class="inlinecode"><span class="id" title="var">M</span></span> и <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span>), и Coq
 восстанавливает его из контекста, но иногда он все-таки нужен. 
 <div class="paragraph"> </div>
 
@@ -628,7 +638,7 @@ Coq построен на соответствии Карри-Говарда. Е
 Построим пример зависимого произведения и соответствующего терма. 
 <div class="paragraph"> </div>
 
- Семейство из двух типов: B true = nat и B false = unit. 
+ Семейство из двух типов: <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">true</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">nat</span></span> и <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">false</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">unit</span></span>. 
 </div>
 <div class="code">
 
@@ -652,7 +662,7 @@ Coq построен на соответствии Карри-Говарда. Е
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Definition</span> <span class="id" title="var">dependent_type_function</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">b</span> : <span class="id" title="var">bool</span>, <span class="id" title="var">B</span> <span class="id" title="var">b</span> :=<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">dependent_type_function</span> : <span class="id" title="keyword">forall</span> <span class="id" title="var">b</span> : <span class="id" title="var">bool</span>, <span class="id" title="var">B</span> <span class="id" title="var">b</span> :=<br/>
 <span class="id" title="keyword">fun</span> <span class="id" title="var">b</span> =&gt;<br/>
 &nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="var">b</span> <span class="id" title="keyword">with</span><br/>
 &nbsp;&nbsp;| <span class="id" title="var">true</span> =&gt; 5<br/>
@@ -671,13 +681,13 @@ Coq построен на соответствии Карри-Говарда. Е
 Как было сказано в лекции 1, цель, показанная в правом верхнем окне
 CoqIDE, есть суждение, где горизонтальная черта обозначает штопор <span class="inlinecode">|-</span>.
 Сверху от черты находится контекст, а снизу — цель в узком смысле слова.
-Таким образом, например, <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">x</span></span> сверху от черты
+Таким образом, например, <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">x</span></span> сверху от черты
 означает посылку, а <span class="inlinecode"><span class="id" title="var">H</span></span> является не только названием этой посылки для
 использования в тактиках, но и переменной, имеющей зависимый тип
-<span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">x</span></span>. Команда <span class="inlinecode"><span class="id" title="keyword">Check</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">5</span> (с точкой в конце) показывает,
+<span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">x</span></span>. Команда <span class="inlinecode"><span class="id" title="keyword">Check</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">5</span> (с точкой в конце) показывает,
 что терм <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">5</span> имеет тип <span class="inlinecode">5</span> <span class="inlinecode">≤</span> <span class="inlinecode">5</span>. Эту формулу можно добавить к посылкам
 тактикой <span class="inlinecode"><span class="id" title="tactic">assert</span></span> <span class="inlinecode">(<span class="id" title="var">H1</span></span> <span class="inlinecode">:=</span> <span class="inlinecode"><span class="id" title="var">H</span></span> <span class="inlinecode">5)</span>. Также можно использовать любые теоремы из
-стандартной библиотеки. Например, <span class="inlinecode"><span class="id" title="var">plus_comm</span></span> имеет тип <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span>
+стандартной библиотеки. Например, <span class="inlinecode"><span class="id" title="var">plus_comm</span></span> имеет тип <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span>
 <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">n</span></span>, а <span class="inlinecode"><span class="id" title="var">plus_comm</span></span> <span class="inlinecode">1</span> <span class="inlinecode">2</span> имеет тип <span class="inlinecode">1</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span> <span class="inlinecode">=</span> <span class="inlinecode">2</span> <span class="inlinecode">+</span> <span class="inlinecode">1</span>.
 
 <div class="paragraph"> </div>
@@ -707,7 +717,7 @@ CoqIDE, есть суждение, где горизонтальная черт�
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Theorem</span> <span class="id" title="var">lt_S_r</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> &lt; <span class="id" title="var">S</span> <span class="id" title="var">n</span> → <span class="id" title="var">m</span> = <span class="id" title="var">n</span> ∨ <span class="id" title="var">m</span> &lt; <span class="id" title="var">n</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">lt_S_r</span> : <span class="id" title="keyword">forall</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>, <span class="id" title="var">m</span> &lt; <span class="id" title="var">S</span> <span class="id" title="var">n</span> → <span class="id" title="var">m</span> = <span class="id" title="var">n</span> ∨ <span class="id" title="var">m</span> &lt; <span class="id" title="var">n</span>.<br/>
 <span class="id" title="keyword">Proof</span>.<br/>
 <span class="id" title="tactic">intros</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>.<br/>
 <span class="id" title="keyword">Search</span> (<span class="id" title="var">_</span> &lt; <span class="id" title="var">S</span> <span class="id" title="var">_</span>).<br/>
@@ -715,24 +725,44 @@ CoqIDE, есть суждение, где горизонтальная черт�
 
 <div class="doc">
 Подходящая теорема:
-<span class="inlinecode"><span class="id" title="var">lt_n_Sm_le</span>:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m</span></span> 
+<span class="inlinecode"><span class="id" title="var">lt_succ_r</span>:</span> <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m</span></span> 
 </div>
 <div class="code">
-<span class="id" title="keyword">Check</span> <span class="id" title="var">lt_n_Sm_le</span>.<br/>
+<span class="id" title="keyword">Check</span> <span class="id" title="var">lt_succ_r</span>.<br/>
 </div>
 
 <div class="doc">
 Печатается теорема выше. 
 </div>
 <div class="code">
-<span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_n_Sm_le</span> <span class="id" title="var">m</span>).<br/>
+<span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_succ_r</span> <span class="id" title="var">m</span>).<br/>
 </div>
 
 <div class="doc">
-<span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">m0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m0</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m0</span></span> 
+<span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">m0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">m0</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m0</span></span> 
 </div>
 <div class="code">
-<span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_n_Sm_le</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_succ_r</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>).<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>. Это конъюнкция двух импликаций. Нужно найти
+способ их разделить. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Search</span> (?<span class="id" title="var">x</span> ∧ <span class="id" title="var">_</span> → ?<span class="id" title="var">x</span>).<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="var">proj1</span>:</span> <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode">[<span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Prop</span>],</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">∧</span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">A</span></span>.
+Квадратные скобки вокруг <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Prop</span></span> говорят о том, что <span class="inlinecode"><span class="id" title="var">A</span></span> и <span class="inlinecode"><span class="id" title="var">B</span></span> являются
+<em>неявными</em> аргументами. Если бы они были обычными аргументами, то нужно
+было бы писать <span class="inlinecode"><span class="id" title="var">proj1</span></span> <span class="inlinecode">(<span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">(<span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span> <span class="inlinecode">(<span class="id" title="var">lt_succ_r</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>.
+Неявные аргументы восстанавливаются из контекста, поэтому достаточно написать
+<span class="inlinecode"><span class="id" title="var">proj1</span></span> <span class="inlinecode">(<span class="id" title="var">lt_succ_r</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode"><span class="id" title="var">n</span>)</span>. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Check</span> <span class="id" title="var">proj1</span> (<span class="id" title="var">lt_succ_r</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>).<br/>
 </div>
 
 <div class="doc">
@@ -746,51 +776,43 @@ CoqIDE, есть суждение, где горизонтальная черт�
 <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> 
 </div>
 <div class="code">
-<span class="id" title="keyword">Check</span> (<span class="id" title="var">lt_n_Sm_le</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>).<br/>
+<span class="id" title="keyword">Check</span> (<span class="id" title="var">proj1</span> (<span class="id" title="var">lt_succ_r</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>) <span class="id" title="var">H</span>).<br/>
 </div>
 
 <div class="doc">
 <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span> 
 </div>
 <div class="code">
-<span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> := <span class="id" title="var">lt_n_Sm_le</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>).<br/>
+<span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> := <span class="id" title="var">proj1</span> (<span class="id" title="var">lt_succ_r</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>) <span class="id" title="var">H</span>).<br/>
 </div>
 
 <div class="doc">
-Появилась посылка <span class="inlinecode"><span class="id" title="var">H1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span> 
-<div class="paragraph"> </div>
-
- Вместо последней тактики можно использовать следующую комбинацию
-<span class="inlinecode"><span class="id" title="tactic">assert</span></span> и <span class="inlinecode"><span class="id" title="tactic">specialize</span></span>.
-
-<div class="paragraph"> </div>
-
-<br/>
-<span class="inlinecode"><span class="id" title="tactic">assert</span> (<span class="id" title="var">H1</span> := <span class="id" title="var">lt_n_Sm_le</span>).<br/>
-<span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H</span>).
-<div class="paragraph"> </div>
-
-</span>
+Появилась посылка <span class="inlinecode"><span class="id" title="var">H1</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">n</span></span>.
+Вместо <span class="inlinecode"><span class="id" title="tactic">assert</span></span> можно использовать <span class="inlinecode"><span class="id" title="tactic">apply</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">lt_succ_r</span></span> <span class="inlinecode"><span class="id" title="tactic">in</span></span> <span class="inlinecode"><span class="id" title="var">H</span></span>. 
 </div>
 <div class="code">
-
-<br/>
-<span class="id" title="keyword">Search</span> (<span class="id" title="var">_</span> ≤ <span class="id" title="var">_</span> → <span class="id" title="var">_</span> ∨ <span class="id" title="var">_</span>).<br/>
+<span class="id" title="keyword">Search</span> "&lt;=" "\/".<br/>
 </div>
 
 <div class="doc">
 Подходящая теорема :
-<span class="inlinecode"><span class="id" title="var">le_lt_or_eq</span>:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">∨</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">m</span></span> 
+<span class="inlinecode"><span class="id" title="var">le_lteq</span>:</span> <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">nat</span>,</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">↔</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><span class="id" title="var">m</span></span> <span class="inlinecode">∨</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">m</span></span> 
 </div>
 <div class="code">
-<span class="id" title="keyword">Check</span> (<span class="id" title="var">le_lt_or_eq</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H1</span>).<br/>
+<span class="id" title="keyword">Check</span> <span class="id" title="var">proj1</span> (<span class="id" title="var">le_lteq</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>) <span class="id" title="var">H1</span>.<br/>
 </div>
 
 <div class="doc">
 m &lt; n \/ m = n 
 </div>
 <div class="code">
-<span class="id" title="tactic">assert</span> (<span class="id" title="var">H2</span> := <span class="id" title="var">le_lt_or_eq</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">H1</span>).<br/>
+<span class="id" title="tactic">assert</span> (<span class="id" title="var">H2</span> := <span class="id" title="var">proj1</span> (<span class="id" title="var">le_lteq</span> <span class="id" title="var">m</span> <span class="id" title="var">n</span>) <span class="id" title="var">H1</span>).<br/>
+</div>
+
+<div class="doc">
+Или <span class="inlinecode"><span class="id" title="tactic">apply</span></span> <span class="inlinecode"><span class="id" title="var">le_lteq</span></span> <span class="inlinecode"><span class="id" title="tactic">in</span></span> <span class="inlinecode"><span class="id" title="var">H1</span></span>. 
+</div>
+<div class="code">
 <span class="id" title="tactic">apply</span> <span class="id" title="var">or_comm</span>. <span class="id" title="tactic">assumption</span>.<br/>
 <span class="id" title="keyword">Qed</span>.<br/>
 
@@ -841,7 +863,7 @@ m &lt; n \/ m = n
 <div class="code">
 
 <br/>
-<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">H</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span>, 0 &lt; <span class="id" title="var">x</span>.<br/>
+<span class="id" title="keyword">Hypothesis</span> <span class="id" title="var">H</span> : <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span>, 0 &lt; <span class="id" title="var">x</span>.<br/>
 
 <br/>
 </div>
@@ -873,11 +895,19 @@ m &lt; n \/ m = n
 
 <div class="paragraph"> </div>
 
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t4</span></span> <span class="inlinecode">:</span> <span class="inlinecode">~(0</span> <span class="inlinecode">&lt;</span> <span class="inlinecode">0)</span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
+
+<div class="paragraph"> </div>
+
+Напоминание: <span class="inlinecode">¬<span class="id" title="var">A</span></span> есть <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="var">False</span></span>.
+
+<div class="paragraph"> </div>
+
 <span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t5</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">False</span></span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 <div class="paragraph"> </div>
 
-<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t6</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">∀</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Prop</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
+<span class="inlinecode"><span class="id" title="keyword">Definition</span></span> <span class="inlinecode"><span class="id" title="var">t6</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Prop</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode">:=</span> <span class="inlinecode">...</span>
 
 </div>
 <div class="code">
@@ -898,12 +928,6 @@ m &lt; n \/ m = n
 
 <a id="lab13"></a><h3 class="section">Дальнейшая информация о бестиповом и типовом лямбда-исчислении</h3>
 
-
-<div class="paragraph"> </div>
-
-Лекции по функциональному программированию.
-Разделы 2, 3 до 3.6 и 6 до 6.1 включительно
-(см. <a href="https://source.unn.ru">source.unn.ru</a>).
 
 <div class="paragraph"> </div>
 
